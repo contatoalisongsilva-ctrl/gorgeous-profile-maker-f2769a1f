@@ -150,6 +150,30 @@ function formatCheckoutUrl(checkoutUrl: string): string {
   }
 }
 
+function buildItensAttribute(flavorQuantities: FlavorQuantities, kitQuantity: number): string {
+  const kitConfig = KIT_CONFIGURATIONS[kitQuantity];
+  const items: string[] = [];
+
+  // Add flavors
+  Object.entries(flavorQuantities).forEach(([flavorId, qty]) => {
+    if (qty > 0) {
+      const flavor = FLAVOR_VARIANT_IDS[flavorId];
+      if (flavor) {
+        items.push(`- ${qty}x ${flavor.name}`);
+      }
+    }
+  });
+
+  // Add gifts
+  if (kitConfig) {
+    kitConfig.gifts.forEach(giftKey => {
+      items.push(`- 1x ${KIT_GIFT_VARIANTS[giftKey].title}`);
+    });
+  }
+
+  return items.join('\n');
+}
+
 function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: number): CartAttribute[] {
   const kitConfig = KIT_CONFIGURATIONS[kitQuantity];
   if (!kitConfig) return [];
@@ -160,9 +184,6 @@ function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: num
     .map(([flavorId, qty]) => ({ flavor: FLAVOR_VARIANT_IDS[flavorId], qty }));
 
   if (selectedFlavors.length === 0) return [];
-
-  // Use first selected flavor as base handle (for kit identification)
-  const primaryFlavor = selectedFlavors[0].flavor;
 
   // Build base variant IDs and SKUs (multiple flavors)
   const baseVariantIds = selectedFlavors.map(({ flavor }) => 
@@ -196,12 +217,16 @@ function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: num
     `${KIT_GIFT_VARIANTS[giftKey].sku}:1`
   ).join('|');
 
+  // Build Itens description
+  const itensAttribute = buildItensAttribute(flavorQuantities, kitQuantity);
+
   return [
     { key: "_kit", value: "true" },
     { key: "_kit_pack", value: String(kitQuantity) },
-    { key: "_kit_base_handle", value: primaryFlavor.handle },
+    { key: "_kit_base_handle", value: `procolo-rejuvenescimento-${kitQuantity}` },
     { key: "_kit_product_handle", value: "kit-colageno-verisol®" },
     { key: "_kit_price_cents", value: String(kitConfig.priceCents) },
+    { key: "Itens", value: itensAttribute },
     { key: "_kit_base_variant_ids", value: baseVariantIds },
     { key: "_kit_extra_variant_ids", value: extraVariantIds },
     { key: "_kit_base_variant_id_qty", value: baseVariantIdQty },
