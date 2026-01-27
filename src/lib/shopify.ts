@@ -5,13 +5,13 @@ const SHOPIFY_STORE_PERMANENT_DOMAIN = 'renova-be.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 const SHOPIFY_STOREFRONT_TOKEN = '24a3567538b9fcd628b114f2a5ce6274';
 
-// Variant IDs for 1 unit of each flavor
+// Variant IDs for 1 unit of each flavor - each flavor maps to its respective product
 export const FLAVOR_VARIANT_IDS: Record<string, string> = {
-  "cranberry": "gid://shopify/ProductVariant/42319344074823",
-  "tangerina": "gid://shopify/ProductVariant/42319344107591",
-  "pink-lemonade": "gid://shopify/ProductVariant/42319344140359",
-  "limao": "gid://shopify/ProductVariant/42319344173127",
-  "frutas-tropicais": "gid://shopify/ProductVariant/42319344205895",
+  "cranberry": "gid://shopify/ProductVariant/42319344074823",      // Produto Cranberry - variante Cranberry
+  "tangerina": "gid://shopify/ProductVariant/42319344271431",      // Produto Tangerina - variante Tangerina
+  "pink-lemonade": "gid://shopify/ProductVariant/42319105491015",  // Produto Pink Lemonade - variante Pink-lemonade
+  "limao": "gid://shopify/ProductVariant/42319344500807",          // Produto Limão - variante Limão
+  "frutas-tropicais": "gid://shopify/ProductVariant/42319344697415", // Produto Frutas Tropicais - variante Tropical
 };
 
 export interface CartLine {
