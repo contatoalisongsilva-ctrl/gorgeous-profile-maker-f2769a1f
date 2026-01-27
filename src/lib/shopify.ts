@@ -14,6 +14,12 @@ export const FLAVOR_VARIANT_IDS: Record<string, string> = {
   "frutas-tropicais": "gid://shopify/ProductVariant/42319344697415", // Produto Frutas Tropicais - variante Tropical
 };
 
+// Kit Colágeno Verisol® - variantes por quantidade (produto único com brindes inclusos)
+export const KIT_VARIANT_IDS: Record<number, string> = {
+  3: "gid://shopify/ProductVariant/42322029019207",  // Kit 3 unidades - R$ 267,70
+  6: "gid://shopify/ProductVariant/42322029051975",  // Kit 6 unidades - R$ 477,70
+};
+
 export interface CartLine {
   merchandiseId: string;
   quantity: number;
