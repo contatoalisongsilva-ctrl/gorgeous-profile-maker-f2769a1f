@@ -1,0 +1,118 @@
+import { Minus, Plus } from "lucide-react";
+import flavorCranberry from "@/assets/flavor-cranberry.jpg";
+import flavorFrutasTropicais from "@/assets/flavor-frutas-tropicais.jpg";
+import flavorLimao from "@/assets/flavor-limao.jpg";
+import flavorPinkLemonade from "@/assets/flavor-pink-lemonade.jpg";
+import flavorTangerina from "@/assets/flavor-tangerina.jpg";
+
+interface FlavorSelectorProps {
+  flavors: Record<string, number>;
+  onFlavorChange: (flavor: string, change: number) => void;
+  maxFlavors: number;
+  totalFlavors: number;
+}
+
+const FlavorSelector = ({
+  flavors,
+  onFlavorChange,
+  maxFlavors,
+  totalFlavors,
+}: FlavorSelectorProps) => {
+  const flavorOptions = [
+    { id: "cranberry", name: "Cranberry", emoji: "🍒", image: flavorCranberry, color: "#E91E8C" },
+    { id: "frutas-tropicais", name: "Frutas Tropicais", emoji: "🍍", image: flavorFrutasTropicais, color: "#D4A574" },
+    { id: "limao", name: "Limão", emoji: "🍋", image: flavorLimao, color: "#8BC34A" },
+    { id: "pink-lemonade", name: "Pink Lemonade", emoji: "🍹", image: flavorPinkLemonade, color: "#E91E8C" },
+    { id: "tangerina", name: "Tangerina", emoji: "🍊", image: flavorTangerina, color: "#FF8C00" },
+  ];
+
+  const canAdd = totalFlavors < maxFlavors;
+  const isComplete = totalFlavors === maxFlavors;
+
+  return (
+    <div className="bg-white rounded-2xl border border-border p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold text-foreground text-sm">
+          Escolha seus sabores:
+        </h3>
+        <div className="text-right">
+          <span className="text-xs text-muted-foreground">Progresso da seleção</span>
+          <span className={`block text-sm font-bold ${isComplete ? "text-green-600" : "text-primary"}`}>
+            {totalFlavors}/{maxFlavors}
+          </span>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+        <div 
+          className={`h-full transition-all duration-300 ${isComplete ? "bg-green-500" : "bg-primary"}`}
+          style={{ width: `${(totalFlavors / maxFlavors) * 100}%` }}
+        />
+      </div>
+
+      <div className="space-y-2">
+        {flavorOptions.map((flavor) => {
+          const quantity = flavors[flavor.id] || 0;
+          
+          return (
+            <div
+              key={flavor.id}
+              className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
+                quantity > 0
+                  ? "border-primary bg-primary/5"
+                  : "border-border bg-white"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <img 
+                  src={flavor.image} 
+                  alt={flavor.name}
+                  className="w-10 h-10 object-cover rounded-lg"
+                />
+                <span 
+                  className="font-medium text-sm"
+                  style={{ color: flavor.color }}
+                >
+                  {flavor.emoji} {flavor.name}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => onFlavorChange(flavor.id, -1)}
+                  disabled={quantity === 0}
+                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
+                    quantity > 0
+                      ? "border-border bg-background hover:bg-muted"
+                      : "border-border bg-muted cursor-not-allowed opacity-50"
+                  }`}
+                  aria-label={`Remover ${flavor.name}`}
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-6 text-center font-bold text-foreground">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => onFlavorChange(flavor.id, 1)}
+                  disabled={!canAdd}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                    canAdd
+                      ? "bg-primary text-white hover:bg-primary/90"
+                      : "bg-muted cursor-not-allowed opacity-50"
+                  }`}
+                  aria-label={`Adicionar ${flavor.name}`}
+                >
+                  <Plus className="w-4 h-4 text-white" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default FlavorSelector;
