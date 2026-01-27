@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Minus, Plus } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -36,26 +36,47 @@ const FlavorSelectionDrawer = ({
   onOpenChange,
   kitQuantity,
 }: FlavorSelectionDrawerProps) => {
-  const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
+  const [flavorQuantities, setFlavorQuantities] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Para kits 3 e 6, incluímos brindes e atributos do kit
+  // Para kits 3 e 6, permitimos múltiplos sabores
   const isKitProduct = kitQuantity === 3 || kitQuantity === 6;
+  
+  // Total de unidades selecionadas
+  const totalSelected = Object.values(flavorQuantities).reduce((sum, qty) => sum + qty, 0);
+  const remaining = kitQuantity - totalSelected;
 
   // Reset selection when drawer opens
   useEffect(() => {
     if (open) {
-      setSelectedFlavor(null);
+      setFlavorQuantities({});
     }
   }, [open]);
 
+  const handleIncrement = (flavorId: string) => {
+    if (remaining <= 0) return;
+    setFlavorQuantities(prev => ({
+      ...prev,
+      [flavorId]: (prev[flavorId] || 0) + 1
+    }));
+  };
+
+  const handleDecrement = (flavorId: string) => {
+    const current = flavorQuantities[flavorId] || 0;
+    if (current <= 0) return;
+    setFlavorQuantities(prev => ({
+      ...prev,
+      [flavorId]: current - 1
+    }));
+  };
+
   const handleConfirm = async () => {
-    if (!selectedFlavor || isLoading) return;
+    if (totalSelected !== kitQuantity || isLoading) return;
 
     setIsLoading(true);
     
     try {
-      const checkoutUrl = await createShopifyCheckout(selectedFlavor, kitQuantity);
+      const checkoutUrl = await createShopifyCheckout(flavorQuantities, kitQuantity);
       
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
@@ -77,24 +98,35 @@ const FlavorSelectionDrawer = ({
           </DrawerTitle>
           <DrawerDescription className="text-muted-foreground">
             {isKitProduct 
-              ? "Selecione o sabor principal do seu kit"
+              ? `Selecione ${kitQuantity} unidades (pode misturar sabores)`
               : "Selecione o sabor que você deseja"}
           </DrawerDescription>
+          {isKitProduct && (
+            <div className="mt-2 text-sm font-medium">
+              <span className={remaining === 0 ? "text-green-600" : "text-primary"}>
+                {totalSelected} de {kitQuantity} selecionadas
+              </span>
+              {remaining > 0 && (
+                <span className="text-muted-foreground ml-1">
+                  (faltam {remaining})
+                </span>
+              )}
+            </div>
+          )}
         </DrawerHeader>
 
-        {/* Flavors List - Single Selection */}
+        {/* Flavors List */}
         <div className="px-4 py-2 space-y-3 overflow-y-auto flex-1">
           {FLAVORS.map((flavor) => {
-            const isSelected = selectedFlavor === flavor.id;
+            const quantity = flavorQuantities[flavor.id] || 0;
             
             return (
-              <button
+              <div
                 key={flavor.id}
-                onClick={() => setSelectedFlavor(flavor.id)}
                 className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
-                  isSelected 
+                  quantity > 0 
                     ? "border-primary bg-primary/5 ring-2 ring-primary/20" 
-                    : "border-border bg-white hover:border-primary/30"
+                    : "border-border bg-white"
                 }`}
               >
                 {/* Flavor Info */}
@@ -114,15 +146,37 @@ const FlavorSelectionDrawer = ({
                   </span>
                 </div>
 
-                {/* Selection Indicator */}
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                  isSelected 
-                    ? "bg-primary text-white" 
-                    : "border-2 border-muted-foreground/30"
-                }`}>
-                  {isSelected && <Check className="w-4 h-4" />}
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleDecrement(flavor.id)}
+                    disabled={quantity === 0}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                      quantity > 0 
+                        ? "bg-primary/10 text-primary hover:bg-primary/20" 
+                        : "bg-muted text-muted-foreground cursor-not-allowed"
+                    }`}
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  
+                  <span className="w-8 text-center font-bold text-lg">
+                    {quantity}
+                  </span>
+                  
+                  <button
+                    onClick={() => handleIncrement(flavor.id)}
+                    disabled={remaining === 0}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                      remaining > 0 
+                        ? "bg-primary text-white hover:bg-primary/90" 
+                        : "bg-muted text-muted-foreground cursor-not-allowed"
+                    }`}
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -130,9 +184,9 @@ const FlavorSelectionDrawer = ({
         <DrawerFooter className="pt-4">
           <Button
             onClick={handleConfirm}
-            disabled={!selectedFlavor || isLoading}
+            disabled={totalSelected !== kitQuantity || isLoading}
             className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
-              selectedFlavor && !isLoading
+              totalSelected === kitQuantity && !isLoading
                 ? "bg-primary text-white hover:bg-primary/90"
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
@@ -142,10 +196,10 @@ const FlavorSelectionDrawer = ({
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 Processando...
               </>
-            ) : selectedFlavor ? (
+            ) : totalSelected === kitQuantity ? (
               "Confirmar e Ir para Pagamento"
             ) : (
-              "Selecione um sabor"
+              `Selecione ${remaining} unidade${remaining !== 1 ? 's' : ''}`
             )}
           </Button>
           <DrawerClose asChild>
