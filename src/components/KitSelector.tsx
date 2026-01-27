@@ -2,13 +2,15 @@ import { Truck } from "lucide-react";
 import kit1Img from "@/assets/kit-1-unidade.png";
 import kit3Img from "@/assets/kit-3-unidades.png";
 import kit6Img from "@/assets/kit-6-unidades.png";
+import { Button } from "./ui/button";
 
 interface KitSelectorProps {
   selectedKit: "1x" | "3x" | "6x";
   onKitChange: (kit: "1x" | "3x" | "6x") => void;
+  onBuyClick: (kit: "1x" | "3x" | "6x") => void;
 }
 
-const KitSelector = ({ selectedKit, onKitChange }: KitSelectorProps) => {
+const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps) => {
   const kits = [
     {
       id: "1x" as const,
@@ -74,7 +76,7 @@ const KitSelector = ({ selectedKit, onKitChange }: KitSelectorProps) => {
             )}
 
             {/* Discount Badge */}
-            <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold py-1 px-2.5 rounded-md z-10">
+            <div className="absolute top-3 right-3 bg-destructive text-white text-[10px] font-bold py-1 px-2.5 rounded-md z-10">
               {kit.discount}% OFF
             </div>
 
@@ -121,13 +123,24 @@ const KitSelector = ({ selectedKit, onKitChange }: KitSelectorProps) => {
               {kit.gifts && kit.gifts.length > 0 && (
                 <div className="mt-2 text-[10px] text-muted-foreground">
                   <span className="font-medium text-foreground">+ Brindes:</span>
-                  {kit.gifts.map((gift, index) => (
+                {kit.gifts.map((gift, index) => (
                     <span key={index} className="block">
                       🎁 {gift}
                     </span>
                   ))}
                 </div>
               )}
+
+              {/* Buy Button */}
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onBuyClick(kit.id);
+                }}
+                className="w-full mt-3 bg-primary hover:bg-primary/90 text-white font-semibold text-sm py-2"
+              >
+                Comprar
+              </Button>
             </div>
           </div>
         ))}
@@ -155,7 +168,7 @@ const KitSelector = ({ selectedKit, onKitChange }: KitSelectorProps) => {
                 )}
 
                 {/* Discount Badge */}
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold py-1 px-2.5 rounded-md z-10">
+                <div className="absolute top-3 right-3 bg-destructive text-white text-[10px] font-bold py-1 px-2.5 rounded-md z-10">
                   {kit.discount}% OFF
                 </div>
 
@@ -209,6 +222,17 @@ const KitSelector = ({ selectedKit, onKitChange }: KitSelectorProps) => {
                       ))}
                     </div>
                   )}
+
+                  {/* Buy Button */}
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onBuyClick(kit.id);
+                    }}
+                    className="w-full mt-3 bg-primary hover:bg-primary/90 text-white font-semibold text-sm py-2"
+                  >
+                    Comprar
+                  </Button>
                 </div>
               </div>
             );

@@ -3,15 +3,21 @@ import { Loader2, Truck, Shield, Award, ThumbsUp } from "lucide-react";
 import { useSelectedKit } from "@/contexts/SelectedKitContext";
 import KitSelector from "./KitSelector";
 import FlavorSelector from "./FlavorSelector";
-import UpgradeCard from "./UpgradeCard";
 import { createShopifyCheckout } from "@/lib/shopify";
 import { Button } from "./ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "./ui/drawer";
 
 const OfferSection = () => {
-  const { selectedQuantity, setSelectedQuantity } = useSelectedKit();
+  const { setSelectedQuantity } = useSelectedKit();
   const [selectedKit, setSelectedKit] = useState<"1x" | "3x" | "6x">("3x");
   const [flavors, setFlavors] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const maxFlavors = selectedKit === "1x" ? 1 : selectedKit === "3x" ? 3 : 6;
   const totalFlavors = Object.values(flavors).reduce((a, b) => a + b, 0);
@@ -24,6 +30,11 @@ const OfferSection = () => {
     const quantity = kit === "1x" ? 1 : kit === "3x" ? 3 : 6;
     setSelectedQuantity(quantity as 1 | 3 | 6);
   }, [setSelectedQuantity]);
+
+  const handleBuyClick = useCallback((kit: "1x" | "3x" | "6x") => {
+    handleKitChange(kit);
+    setIsDrawerOpen(true);
+  }, [handleKitChange]);
 
   const handleFlavorChange = useCallback(
     (flavor: string, change: number) => {
@@ -43,14 +54,6 @@ const OfferSection = () => {
     [maxFlavors]
   );
 
-  const handleUpgrade = () => {
-    if (selectedKit === "1x") {
-      handleKitChange("3x");
-    } else if (selectedKit === "3x") {
-      handleKitChange("6x");
-    }
-  };
-
   const handleCheckout = async () => {
     if (!isFlavorComplete || isLoading) return;
 
@@ -62,6 +65,7 @@ const OfferSection = () => {
 
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
+        setIsDrawerOpen(false);
       }
     } finally {
       setIsLoading(false);
@@ -111,59 +115,62 @@ const OfferSection = () => {
         </div>
 
         {/* Kit Selector */}
-        <div className="max-w-3xl mx-auto mb-6">
-          <KitSelector selectedKit={selectedKit} onKitChange={handleKitChange} />
-        </div>
-
-        {/* Upgrade Card */}
-        <div className="max-w-3xl mx-auto mb-6">
-          <UpgradeCard currentKit={selectedKit} onUpgrade={handleUpgrade} />
-        </div>
-
-        {/* Flavor Selector */}
-        <div className="max-w-3xl mx-auto mb-6">
-          <FlavorSelector
-            flavors={flavors}
-            onFlavorChange={handleFlavorChange}
-            maxFlavors={maxFlavors}
-            totalFlavors={totalFlavors}
-          />
-        </div>
-
-        {/* Checkout Button */}
         <div className="max-w-3xl mx-auto mb-10">
-          <Button
-            onClick={handleCheckout}
-            disabled={!isFlavorComplete || isLoading}
-            className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
-              isFlavorComplete && !isLoading
-                ? "bg-primary text-white hover:bg-primary/90"
-                : "bg-muted text-muted-foreground cursor-not-allowed"
-            }`}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processando...
-              </>
-            ) : isFlavorComplete ? (
-              "Comprar Agora"
-            ) : (
-              `Selecione ${maxFlavors - totalFlavors} sabor${maxFlavors - totalFlavors !== 1 ? "es" : ""}`
-            )}
-          </Button>
+          <KitSelector selectedKit={selectedKit} onKitChange={handleKitChange} onBuyClick={handleBuyClick} />
         </div>
 
-        {/* Delivery info */}
-        <div className="max-w-md mx-auto mb-10">
-          <div className="p-4 bg-blue-50 rounded-xl flex items-start gap-3">
-            <span className="text-blue-500 text-xl">⚡</span>
-            <div>
-              <p className="font-semibold text-sm text-foreground">ENTREGA FULL – Envio imediato em até 24h</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Comprando dentro das próximas 7h 34 min</p>
+        {/* Flavor Selection Drawer */}
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+          <DrawerContent className="max-h-[90vh]">
+            <DrawerHeader className="text-center pb-2">
+              <DrawerTitle className="text-lg font-bold">
+                Escolha seus sabores - Kit {selectedKit}
+              </DrawerTitle>
+            </DrawerHeader>
+            <div className="px-4 pb-6 overflow-y-auto">
+              {/* Flavor Selector */}
+              <div className="mb-4">
+                <FlavorSelector
+                  flavors={flavors}
+                  onFlavorChange={handleFlavorChange}
+                  maxFlavors={maxFlavors}
+                  totalFlavors={totalFlavors}
+                />
+              </div>
+
+              {/* Checkout Button */}
+              <Button
+                onClick={handleCheckout}
+                disabled={!isFlavorComplete || isLoading}
+                className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
+                  isFlavorComplete && !isLoading
+                    ? "bg-primary text-white hover:bg-primary/90"
+                    : "bg-muted text-muted-foreground cursor-not-allowed"
+                }`}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Processando...
+                  </>
+                ) : isFlavorComplete ? (
+                  "Comprar Agora"
+                ) : (
+                  `Selecione ${maxFlavors - totalFlavors} sabor${maxFlavors - totalFlavors !== 1 ? "es" : ""}`
+                )}
+              </Button>
+
+              {/* Delivery info */}
+              <div className="mt-4 p-3 bg-blue-50 rounded-xl flex items-start gap-3">
+                <span className="text-blue-500 text-lg">⚡</span>
+                <div>
+                  <p className="font-semibold text-xs text-foreground">ENTREGA FULL – Envio imediato em até 24h</p>
+                  <p className="text-[11px] text-muted-foreground">Comprando dentro das próximas 7h 34 min</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </DrawerContent>
+        </Drawer>
 
         {/* Guarantees Section */}
         <div className="max-w-3xl mx-auto">
