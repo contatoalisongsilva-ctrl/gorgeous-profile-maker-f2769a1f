@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Minus, Plus, Loader2 } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -10,8 +10,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { createShopifyCheckout, FLAVOR_VARIANT_IDS, CartLine } from "@/lib/shopify";
+import { createShopifyCheckout, FLAVOR_VARIANT_IDS, KIT_VARIANT_IDS, CartLine } from "@/lib/shopify";
 import flavorCranberry from "@/assets/flavor-cranberry.jpg";
 import flavorFrutasTropicais from "@/assets/flavor-frutas-tropicais.jpg";
 import flavorLimao from "@/assets/flavor-limao.jpg";
@@ -37,53 +36,42 @@ const FlavorSelectionDrawer = ({
   onOpenChange,
   kitQuantity,
 }: FlavorSelectionDrawerProps) => {
-  const [selectedFlavors, setSelectedFlavors] = useState<Record<string, number>>({});
+  const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Reset selections when drawer opens
+  // Para kits 3 e 6, usamos o produto Kit Colágeno Verisol® com variante de quantidade
+  // Para kit 1, usamos o produto individual do sabor selecionado
+  const isKitProduct = kitQuantity === 3 || kitQuantity === 6;
+
+  // Reset selection when drawer opens
   useEffect(() => {
     if (open) {
-      setSelectedFlavors({});
+      setSelectedFlavor(null);
     }
   }, [open]);
 
-  const totalSelected = Object.values(selectedFlavors).reduce((sum, count) => sum + count, 0);
-  const progressPercent = (totalSelected / kitQuantity) * 100;
-  const isComplete = totalSelected === kitQuantity;
-  const remaining = kitQuantity - totalSelected;
-
-  const updateFlavor = (flavorId: string, delta: number) => {
-    setSelectedFlavors((prev) => {
-      const current = prev[flavorId] || 0;
-      const newValue = Math.max(0, current + delta);
-      
-      // Don't allow adding more than needed
-      if (delta > 0 && totalSelected >= kitQuantity) {
-        return prev;
-      }
-      
-      if (newValue === 0) {
-        const { [flavorId]: _, ...rest } = prev;
-        return rest;
-      }
-      
-      return { ...prev, [flavorId]: newValue };
-    });
-  };
-
   const handleConfirm = async () => {
-    if (!isComplete || isLoading) return;
+    if (!selectedFlavor || isLoading) return;
 
     setIsLoading(true);
     
     try {
-      // Build cart lines from selected flavors
-      const lines: CartLine[] = Object.entries(selectedFlavors)
-        .filter(([_, quantity]) => quantity > 0)
-        .map(([flavorId, quantity]) => ({
-          merchandiseId: FLAVOR_VARIANT_IDS[flavorId],
-          quantity,
-        }));
+      let lines: CartLine[];
+
+      if (isKitProduct) {
+        // Para kits 3 e 6: usar variante do Kit Colágeno Verisol®
+        const kitVariantId = KIT_VARIANT_IDS[kitQuantity];
+        lines = [{
+          merchandiseId: kitVariantId,
+          quantity: 1,
+        }];
+      } else {
+        // Para kit 1: usar produto individual do sabor
+        lines = [{
+          merchandiseId: FLAVOR_VARIANT_IDS[selectedFlavor],
+          quantity: 1,
+        }];
+      }
 
       const checkoutUrl = await createShopifyCheckout(lines);
       
@@ -101,45 +89,30 @@ const FlavorSelectionDrawer = ({
       <DrawerContent className="max-h-[85vh]">
         <DrawerHeader className="text-center pb-2">
           <DrawerTitle className="text-xl font-bold text-foreground">
-            Monte seu kit de {kitQuantity} {kitQuantity === 1 ? "unidade" : "unidades"}
+            {isKitProduct 
+              ? `Kit ${kitQuantity} Unidades` 
+              : "Escolha seu sabor"}
           </DrawerTitle>
           <DrawerDescription className="text-muted-foreground">
-            Escolha os sabores que você deseja
+            {isKitProduct 
+              ? "Selecione o sabor principal do seu kit"
+              : "Selecione o sabor que você deseja"}
           </DrawerDescription>
         </DrawerHeader>
 
-        {/* Progress Section */}
-        <div className="px-6 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-foreground">
-              {totalSelected} de {kitQuantity} selecionados
-            </span>
-            {!isComplete && (
-              <span className="text-xs text-muted-foreground">
-                Faltam {remaining}
-              </span>
-            )}
-            {isComplete && (
-              <span className="text-xs text-primary font-semibold">
-                ✓ Completo!
-              </span>
-            )}
-          </div>
-          <Progress value={progressPercent} className="h-2" />
-        </div>
-
-        {/* Flavors List */}
+        {/* Flavors List - Single Selection */}
         <div className="px-4 py-2 space-y-3 overflow-y-auto flex-1">
           {FLAVORS.map((flavor) => {
-            const count = selectedFlavors[flavor.id] || 0;
+            const isSelected = selectedFlavor === flavor.id;
             
             return (
-              <div
+              <button
                 key={flavor.id}
-                className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
-                  count > 0 
-                    ? "border-primary bg-primary/5" 
-                    : "border-border bg-white"
+                onClick={() => setSelectedFlavor(flavor.id)}
+                className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
+                  isSelected 
+                    ? "border-primary bg-primary/5 ring-2 ring-primary/20" 
+                    : "border-border bg-white hover:border-primary/30"
                 }`}
               >
                 {/* Flavor Info */}
@@ -159,39 +132,15 @@ const FlavorSelectionDrawer = ({
                   </span>
                 </div>
 
-                {/* Counter */}
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => updateFlavor(flavor.id, -1)}
-                    disabled={count === 0}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                      count === 0
-                        ? "bg-muted text-muted-foreground cursor-not-allowed"
-                        : "bg-primary/10 text-primary hover:bg-primary/20"
-                    }`}
-                    aria-label={`Remover ${flavor.name}`}
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  
-                  <span className="w-8 text-center font-bold text-foreground text-lg">
-                    {count}
-                  </span>
-                  
-                  <button
-                    onClick={() => updateFlavor(flavor.id, 1)}
-                    disabled={totalSelected >= kitQuantity}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                      totalSelected >= kitQuantity
-                        ? "bg-muted text-muted-foreground cursor-not-allowed"
-                        : "bg-primary text-white hover:bg-primary/90"
-                    }`}
-                    aria-label={`Adicionar ${flavor.name}`}
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
+                {/* Selection Indicator */}
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                  isSelected 
+                    ? "bg-primary text-white" 
+                    : "border-2 border-muted-foreground/30"
+                }`}>
+                  {isSelected && <Check className="w-4 h-4" />}
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -199,9 +148,9 @@ const FlavorSelectionDrawer = ({
         <DrawerFooter className="pt-4">
           <Button
             onClick={handleConfirm}
-            disabled={!isComplete || isLoading}
+            disabled={!selectedFlavor || isLoading}
             className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
-              isComplete && !isLoading
+              selectedFlavor && !isLoading
                 ? "bg-primary text-white hover:bg-primary/90"
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
@@ -211,10 +160,10 @@ const FlavorSelectionDrawer = ({
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 Processando...
               </>
-            ) : isComplete ? (
+            ) : selectedFlavor ? (
               "Confirmar e Ir para Pagamento"
             ) : (
-              `Selecione mais ${remaining} sabor${remaining !== 1 ? "es" : ""}`
+              "Selecione um sabor"
             )}
           </Button>
           <DrawerClose asChild>
