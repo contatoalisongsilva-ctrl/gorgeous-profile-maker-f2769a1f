@@ -13,29 +13,29 @@ export const FLAVOR_VARIANT_IDS: Record<string, { id: string; sku: string; handl
     handle: "colageno-verisol®-com-acido-hialuronico-frutado-cranberry",
     name: "Cranberry"
   },
-  "tangerina": {
-    id: "gid://shopify/ProductVariant/42319344271431",
-    sku: "COL1.0207",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-tangerina",
-    name: "Tangerina"
-  },
-  "pink-lemonade": {
-    id: "gid://shopify/ProductVariant/42319105491015",
-    sku: "COL1.0205",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-pink-lemonade",
-    name: "Pink Lemonade"
+  "frutas-tropicais": {
+    id: "gid://shopify/ProductVariant/42319344205895",
+    sku: "COL1.0118",
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-frutas-tropicais",
+    name: "Frutas Tropicais"
   },
   "limao": {
-    id: "gid://shopify/ProductVariant/42319344500807",
-    sku: "COL1.0208",
+    id: "gid://shopify/ProductVariant/42319344173127",
+    sku: "COL1.0210",
     handle: "colageno-verisol®-com-acido-hialuronico-frutado-limao",
     name: "Limão"
   },
-  "frutas-tropicais": {
-    id: "gid://shopify/ProductVariant/42319344697415",
-    sku: "COL1.0210",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-frutas-tropicais",
-    name: "Frutas Tropicais"
+  "pink-lemonade": {
+    id: "gid://shopify/ProductVariant/42319344140359",
+    sku: "COL1.0267",
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-pink-lemonade",
+    name: "Pink Lemonade"
+  },
+  "tangerina": {
+    id: "gid://shopify/ProductVariant/42319344107591",
+    sku: "COL1.0211",
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-tangerina",
+    name: "Tangerina"
   },
 };
 
