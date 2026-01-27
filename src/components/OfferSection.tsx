@@ -1,56 +1,72 @@
-import { useState } from "react";
-import {
-  Truck,
-  Shield,
-  Award,
-  ThumbsUp,
-} from "lucide-react";
+import { useState, useCallback } from "react";
+import { Loader2, Truck, Shield, Award, ThumbsUp } from "lucide-react";
 import { useSelectedKit } from "@/contexts/SelectedKitContext";
-import FlavorSelectionDrawer from "./FlavorSelectionDrawer";
-import kit1Img from "@/assets/kit-1-unidade.png";
-import kit3Img from "@/assets/kit-3-unidades.png";
-import kit6Img from "@/assets/kit-6-unidades.png";
+import KitSelector from "./KitSelector";
+import FlavorSelector from "./FlavorSelector";
+import UpgradeCard from "./UpgradeCard";
+import { createShopifyCheckout } from "@/lib/shopify";
+import { Button } from "./ui/button";
 
 const OfferSection = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedKitForDrawer, setSelectedKitForDrawer] = useState<1 | 3 | 6>(1);
   const { selectedQuantity, setSelectedQuantity } = useSelectedKit();
+  const [selectedKit, setSelectedKit] = useState<"1x" | "3x" | "6x">("3x");
+  const [flavors, setFlavors] = useState<Record<string, number>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const kits = [
-    {
-      value: 1 as const,
-      image: kit1Img,
-      label: "1 unidade",
-      price: "R$ 117,70",
-      originalPrice: "R$ 149,90",
-      priceEach: "117,70",
-      discount: "21% OFF",
-      badge: null,
-      hasFreeShipping: false,
+  const maxFlavors = selectedKit === "1x" ? 1 : selectedKit === "3x" ? 3 : 6;
+  const totalFlavors = Object.values(flavors).reduce((a, b) => a + b, 0);
+  const isFlavorComplete = totalFlavors === maxFlavors;
+
+  const handleKitChange = useCallback((kit: "1x" | "3x" | "6x") => {
+    setSelectedKit(kit);
+    setFlavors({}); // Reset sabores quando muda o kit
+    // Update the context for the sticky button
+    const quantity = kit === "1x" ? 1 : kit === "3x" ? 3 : 6;
+    setSelectedQuantity(quantity as 1 | 3 | 6);
+  }, [setSelectedQuantity]);
+
+  const handleFlavorChange = useCallback(
+    (flavor: string, change: number) => {
+      setFlavors((prev) => {
+        const current = prev[flavor] || 0;
+        const newValue = Math.max(0, current + change);
+        const total =
+          Object.entries(prev)
+            .filter(([key]) => key !== flavor)
+            .reduce((a, [, b]) => a + b, 0) + newValue;
+
+        if (total > maxFlavors) return prev;
+
+        return { ...prev, [flavor]: newValue };
+      });
     },
-    {
-      value: 3 as const,
-      image: kit3Img,
-      label: "3 unidades",
-      price: "R$ 267,70",
-      originalPrice: "R$ 449,70",
-      priceEach: "89,23",
-      discount: "40% OFF",
-      badge: "MAIS VENDIDO",
-      hasFreeShipping: true,
-    },
-    {
-      value: 6 as const,
-      image: kit6Img,
-      label: "6 unidades",
-      price: "R$ 477,70",
-      originalPrice: "R$ 899,40",
-      priceEach: "79,61",
-      discount: "46% OFF",
-      badge: "MELHOR PREÇO",
-      hasFreeShipping: true,
-    },
-  ];
+    [maxFlavors]
+  );
+
+  const handleUpgrade = () => {
+    if (selectedKit === "1x") {
+      handleKitChange("3x");
+    } else if (selectedKit === "3x") {
+      handleKitChange("6x");
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (!isFlavorComplete || isLoading) return;
+
+    setIsLoading(true);
+
+    try {
+      const kitQuantity = selectedKit === "1x" ? 1 : selectedKit === "3x" ? 3 : 6;
+      const checkoutUrl = await createShopifyCheckout(flavors, kitQuantity);
+
+      if (checkoutUrl) {
+        window.open(checkoutUrl, '_blank');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const guarantees = [
     {
@@ -79,88 +95,6 @@ const OfferSection = () => {
     },
   ];
 
-  const KitCard = ({ kit }: { kit: typeof kits[0] }) => (
-    <div
-      onClick={() => setSelectedQuantity(kit.value)}
-      className={`relative bg-white rounded-2xl border-2 overflow-hidden text-center transition-all hover:shadow-lg cursor-pointer flex flex-col h-full ${
-        selectedQuantity === kit.value
-          ? "border-primary shadow-lg"
-          : "border-border hover:border-primary/50"
-      }`}
-    >
-      {/* Badge */}
-      {kit.badge && (
-        <div className={`absolute top-3 left-3 py-1 px-2.5 text-[10px] font-bold text-white z-10 rounded-md uppercase tracking-wide ${
-          kit.badge === "MAIS VENDIDO" 
-            ? "bg-primary" 
-            : "bg-green-500"
-        }`}>
-          {kit.badge}
-        </div>
-      )}
-
-      {/* Discount Badge */}
-      {kit.discount && (
-        <div className="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold py-1 px-2.5 rounded-md z-10">
-          {kit.discount}
-        </div>
-      )}
-
-      {/* Image Section */}
-      <div className="bg-muted flex-shrink-0 overflow-hidden flex items-center justify-center">
-        <img
-          src={kit.image}
-          alt={kit.label}
-          className="w-full h-52 md:h-60 object-cover object-center"
-        />
-      </div>
-
-      {/* Content Section */}
-      <div className="p-3 flex flex-col flex-grow">
-        {/* Kit Label */}
-        <h3 className="font-bold text-sm text-foreground text-center mb-2">{kit.label}</h3>
-
-        {/* Price Section - Compact */}
-        <div className="text-center space-y-0.5">
-          <p className="text-[10px] text-muted-foreground">R$ {kit.priceEach}/unidade</p>
-          {kit.originalPrice && (
-            <span className="text-[10px] text-muted-foreground/60 line-through block">{kit.originalPrice}</span>
-          )}
-          <span className="font-bold text-lg md:text-xl text-foreground block">{kit.price}</span>
-          <p className="text-[10px] text-primary font-semibold">no pix</p>
-          <p className="text-[9px] text-muted-foreground">
-            5x R$ {(parseFloat(kit.price.replace('R$ ', '').replace('.', '').replace(',', '.')) / 5).toFixed(2).replace('.', ',')} s/juros
-          </p>
-        </div>
-
-        {/* Free Shipping Badge */}
-        {kit.hasFreeShipping && (
-          <div className="flex items-center justify-center gap-1 text-green-600 text-[10px] font-medium mt-2">
-            <Truck className="w-3 h-3" />
-            <span>Frete Grátis</span>
-          </div>
-        )}
-
-        {/* Buy Button */}
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedQuantity(kit.value);
-            setSelectedKitForDrawer(kit.value);
-            setDrawerOpen(true);
-          }}
-          className={`w-full py-2.5 rounded-xl text-xs font-semibold transition-all mt-auto ${
-            selectedQuantity === kit.value
-              ? "bg-primary text-white hover:bg-primary/90"
-              : "bg-muted text-foreground hover:bg-primary hover:text-white"
-          }`}
-        >
-          Comprar
-        </button>
-      </div>
-    </div>
-  );
-
   return (
     <section className="py-10 md:py-12 bg-white" id="oferta">
       <div className="container mx-auto px-4">
@@ -176,20 +110,48 @@ const OfferSection = () => {
           </p>
         </div>
 
-        {/* Products Grid */}
-        <div className="max-w-3xl mx-auto mb-10">
-          {/* Top Row: 1 unit and 3 units side by side */}
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <KitCard kit={kits[0]} />
-            <KitCard kit={kits[1]} />
-          </div>
+        {/* Kit Selector */}
+        <div className="max-w-3xl mx-auto mb-6">
+          <KitSelector selectedKit={selectedKit} onKitChange={handleKitChange} />
+        </div>
 
-          {/* Bottom Row: 6 units centered */}
-          <div className="flex justify-center">
-            <div className="w-full md:w-1/2">
-              <KitCard kit={kits[2]} />
-            </div>
-          </div>
+        {/* Upgrade Card */}
+        <div className="max-w-3xl mx-auto mb-6">
+          <UpgradeCard currentKit={selectedKit} onUpgrade={handleUpgrade} />
+        </div>
+
+        {/* Flavor Selector */}
+        <div className="max-w-3xl mx-auto mb-6">
+          <FlavorSelector
+            flavors={flavors}
+            onFlavorChange={handleFlavorChange}
+            maxFlavors={maxFlavors}
+            totalFlavors={totalFlavors}
+          />
+        </div>
+
+        {/* Checkout Button */}
+        <div className="max-w-3xl mx-auto mb-10">
+          <Button
+            onClick={handleCheckout}
+            disabled={!isFlavorComplete || isLoading}
+            className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
+              isFlavorComplete && !isLoading
+                ? "bg-primary text-white hover:bg-primary/90"
+                : "bg-muted text-muted-foreground cursor-not-allowed"
+            }`}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Processando...
+              </>
+            ) : isFlavorComplete ? (
+              "Comprar Agora"
+            ) : (
+              `Selecione ${maxFlavors - totalFlavors} sabor${maxFlavors - totalFlavors !== 1 ? "es" : ""}`
+            )}
+          </Button>
         </div>
 
         {/* Delivery info */}
@@ -237,12 +199,6 @@ const OfferSection = () => {
           </div>
         </div>
       </div>
-      {/* Flavor Selection Drawer */}
-      <FlavorSelectionDrawer
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        kitQuantity={selectedKitForDrawer}
-      />
     </section>
   );
 };

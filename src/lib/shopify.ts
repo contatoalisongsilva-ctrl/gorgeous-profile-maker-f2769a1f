@@ -63,6 +63,10 @@ export const KIT_CONFIGURATIONS: Record<number, {
   priceCents: number;
   gifts: Array<keyof typeof KIT_GIFT_VARIANTS>;
 }> = {
+  1: {
+    priceCents: 11770, // R$ 117,70
+    gifts: ["cremeRetinol"] // 1x Creme Retinol
+  },
   3: {
     priceCents: 26770, // R$ 267,70
     gifts: ["cremeRetinol", "serumVitaB3"]
@@ -273,15 +277,15 @@ export async function createShopifyCheckout(
     let lines: CartLine[];
     let attributes: CartAttribute[] = [];
 
-    const isKitProduct = kitQuantity === 3 || kitQuantity === 6;
+    const isKitProduct = kitQuantity === 1 || kitQuantity === 3 || kitQuantity === 6;
     const totalSelected = Object.values(flavorQuantities).reduce((sum, qty) => sum + qty, 0);
 
-    if (isKitProduct) {
-      // For kits 3 and 6: add base products + gifts with kit attributes
+    if (isKitProduct && totalSelected === kitQuantity) {
+      // For all kits (1, 3, 6): add base products + gifts with kit attributes
       lines = buildKitCartLines(flavorQuantities, kitQuantity);
       attributes = buildKitAttributes(flavorQuantities, kitQuantity);
     } else {
-      // For single unit: just the flavor product
+      // Fallback for single unit without kit logic
       const selectedFlavorId = Object.entries(flavorQuantities).find(([, qty]) => qty > 0)?.[0];
       if (!selectedFlavorId) {
         toast.error("Selecione um sabor");
