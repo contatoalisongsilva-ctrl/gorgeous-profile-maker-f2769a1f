@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 declare global {
   interface Window {
     ShopifyBuy: any;
-    fbq: (...args: any[]) => void;
-    gtag: (...args: any[]) => void;
   }
 }
 
@@ -152,37 +150,6 @@ const ShopifyBuyButton = ({ kitValue, size = "normal" }: ShopifyBuyButtonProps) 
                 button: size === "small" ? "Comprar" : "Comprar agora",
               },
               variantId: variantIds[kitValue],
-              events: {
-                beforeInit: () => {
-                  // Track analytics before checkout
-                  const price = kitPrices[kitValue];
-                  const itemName = kitNames[kitValue];
-
-                  if (typeof window.fbq === "function") {
-                    window.fbq("track", "AddToCart", {
-                      content_type: "product",
-                      content_ids: [`kit-${kitValue}`],
-                      value: price,
-                      currency: "BRL",
-                    });
-                  }
-
-                  if (typeof window.gtag === "function") {
-                    window.gtag("event", "add_to_cart", {
-                      currency: "BRL",
-                      value: price,
-                      items: [
-                        {
-                          item_id: `kit-${kitValue}`,
-                          item_name: `New Hair - ${itemName}`,
-                          price: price,
-                          quantity: 1,
-                        },
-                      ],
-                    });
-                  }
-                },
-              },
             },
             cart: {
               styles: {
