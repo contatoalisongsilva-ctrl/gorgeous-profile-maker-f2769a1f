@@ -35,31 +35,6 @@ const HeroSectionSimple = () => {
         </div>
       </div>
 
-      {/* Top Banner */}
-      <div className="bg-primary py-2 text-center text-xs md:text-sm font-medium overflow-hidden w-full">
-        <div className="flex animate-scroll-x whitespace-nowrap">
-          <div className="flex items-center">
-            <span className="text-white">Frete Grátis acima de R$ 199</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-            <span className="text-white">Colágeno Verisol® + Ácido Hialurônico</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-            <span className="text-white">Zero Açúcar • Zero Lactose</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-            <span className="text-white">Resultados em até 4 semanas</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-          </div>
-          <div className="flex items-center">
-            <span className="text-white">Frete Grátis acima de R$ 199</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-            <span className="text-white">Colágeno Verisol® + Ácido Hialurônico</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-            <span className="text-white">Zero Açúcar • Zero Lactose</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-            <span className="text-white">Resultados em até 4 semanas</span>
-            <span className="mx-3 md:mx-4 text-white/60">•</span>
-          </div>
-        </div>
-      </div>
 
       {/* Hero Banner - Image */}
       <div className="relative w-full">
