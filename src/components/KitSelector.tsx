@@ -91,45 +91,47 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
 
             {/* Content Section */}
             <div className="p-3 flex flex-col flex-grow">
-              <h3 className="font-bold text-sm text-foreground text-center mb-2">
-                {kit.units} unidade{kit.units > 1 ? 's' : ''}
-              </h3>
+              <div className="flex-grow">
+                <h3 className="font-bold text-sm text-foreground text-center mb-2">
+                  {kit.units} unidade{kit.units > 1 ? 's' : ''}
+                </h3>
 
-              <div className="text-center space-y-0.5">
-                <p className="text-[10px] text-muted-foreground">
-                  R$ {kit.pricePerUnit.toFixed(2).replace(".", ",")}/unidade
-                </p>
-                <span className="text-[10px] text-muted-foreground/60 line-through block">
-                  R$ {kit.originalPrice.toFixed(2).replace(".", ",")}
-                </span>
-                <span className="font-bold text-lg md:text-xl text-foreground block">
-                  R$ {kit.totalPrice.toFixed(2).replace(".", ",")}
-                </span>
-                <p className="text-[10px] text-primary font-semibold">no pix</p>
-                <p className="text-[9px] text-muted-foreground">
-                  5x R$ {(kit.totalPrice / 5).toFixed(2).replace(".", ",")} s/juros
-                </p>
+                <div className="text-center space-y-0.5">
+                  <p className="text-[10px] text-muted-foreground">
+                    R$ {kit.pricePerUnit.toFixed(2).replace(".", ",")}/unidade
+                  </p>
+                  <span className="text-[10px] text-muted-foreground/60 line-through block">
+                    R$ {kit.originalPrice.toFixed(2).replace(".", ",")}
+                  </span>
+                  <span className="font-bold text-lg md:text-xl text-foreground block">
+                    R$ {kit.totalPrice.toFixed(2).replace(".", ",")}
+                  </span>
+                  <p className="text-[10px] text-primary font-semibold">no pix</p>
+                  <p className="text-[9px] text-muted-foreground">
+                    5x R$ {(kit.totalPrice / 5).toFixed(2).replace(".", ",")} s/juros
+                  </p>
+                </div>
+
+                {/* Free Shipping Badge */}
+                {kit.hasFreeShipping && (
+                  <div className="flex items-center justify-center gap-1 text-green-600 text-[10px] font-medium mt-2">
+                    <Truck className="w-3 h-3" />
+                    <span>Frete Grátis</span>
+                  </div>
+                )}
+
+                {/* Gifts */}
+                {kit.gifts && kit.gifts.length > 0 && (
+                  <div className="mt-2 text-[10px] text-muted-foreground">
+                    <span className="font-medium text-foreground">+ Brindes:</span>
+                    {kit.gifts.map((gift, index) => (
+                      <span key={index} className="block">
+                        🎁 {gift}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
-
-              {/* Free Shipping Badge */}
-              {kit.hasFreeShipping && (
-                <div className="flex items-center justify-center gap-1 text-green-600 text-[10px] font-medium mt-2">
-                  <Truck className="w-3 h-3" />
-                  <span>Frete Grátis</span>
-                </div>
-              )}
-
-              {/* Gifts */}
-              {kit.gifts && kit.gifts.length > 0 && (
-                <div className="mt-2 text-[10px] text-muted-foreground">
-                  <span className="font-medium text-foreground">+ Brindes:</span>
-                {kit.gifts.map((gift, index) => (
-                    <span key={index} className="block">
-                      🎁 {gift}
-                    </span>
-                  ))}
-                </div>
-              )}
 
               {/* Buy Button */}
               <Button
