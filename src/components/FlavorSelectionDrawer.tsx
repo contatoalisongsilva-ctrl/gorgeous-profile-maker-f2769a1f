@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Loader2 } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { createShopifyCheckout, FLAVOR_VARIANT_IDS, CartLine } from "@/lib/shopify";
 import flavorCranberry from "@/assets/flavor-cranberry.jpg";
 import flavorFrutasTropicais from "@/assets/flavor-frutas-tropicais.jpg";
 import flavorLimao from "@/assets/flavor-limao.jpg";
@@ -21,24 +22,23 @@ interface FlavorSelectionDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   kitQuantity: number;
-  onConfirm: (flavors: Record<string, number>) => void;
 }
 
 const FLAVORS = [
-  { id: "cranberry", name: "Cranberry", image: flavorCranberry, color: "#E91E8C", bgColor: "bg-pink-50" },
-  { id: "frutas-tropicais", name: "Frutas Tropicais", image: flavorFrutasTropicais, color: "#D4A574", bgColor: "bg-amber-50" },
-  { id: "limao", name: "Limão", image: flavorLimao, color: "#8BC34A", bgColor: "bg-lime-50" },
-  { id: "pink-lemonade", name: "Pink Lemonade", image: flavorPinkLemonade, color: "#E91E8C", bgColor: "bg-pink-50" },
-  { id: "tangerina", name: "Tangerina", image: flavorTangerina, color: "#FF8C00", bgColor: "bg-orange-50" },
+  { id: "cranberry", name: "Cranberry", image: flavorCranberry, color: "#E91E8C" },
+  { id: "frutas-tropicais", name: "Frutas Tropicais", image: flavorFrutasTropicais, color: "#D4A574" },
+  { id: "limao", name: "Limão", image: flavorLimao, color: "#8BC34A" },
+  { id: "pink-lemonade", name: "Pink Lemonade", image: flavorPinkLemonade, color: "#E91E8C" },
+  { id: "tangerina", name: "Tangerina", image: flavorTangerina, color: "#FF8C00" },
 ];
 
 const FlavorSelectionDrawer = ({
   open,
   onOpenChange,
   kitQuantity,
-  onConfirm,
 }: FlavorSelectionDrawerProps) => {
   const [selectedFlavors, setSelectedFlavors] = useState<Record<string, number>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // Reset selections when drawer opens
   useEffect(() => {
@@ -71,10 +71,28 @@ const FlavorSelectionDrawer = ({
     });
   };
 
-  const handleConfirm = () => {
-    if (isComplete) {
-      onConfirm(selectedFlavors);
-      onOpenChange(false);
+  const handleConfirm = async () => {
+    if (!isComplete || isLoading) return;
+
+    setIsLoading(true);
+    
+    try {
+      // Build cart lines from selected flavors
+      const lines: CartLine[] = Object.entries(selectedFlavors)
+        .filter(([_, quantity]) => quantity > 0)
+        .map(([flavorId, quantity]) => ({
+          merchandiseId: FLAVOR_VARIANT_IDS[flavorId],
+          quantity,
+        }));
+
+      const checkoutUrl = await createShopifyCheckout(lines);
+      
+      if (checkoutUrl) {
+        window.open(checkoutUrl, '_blank');
+        onOpenChange(false);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -181,20 +199,26 @@ const FlavorSelectionDrawer = ({
         <DrawerFooter className="pt-4">
           <Button
             onClick={handleConfirm}
-            disabled={!isComplete}
+            disabled={!isComplete || isLoading}
             className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
-              isComplete
+              isComplete && !isLoading
                 ? "bg-primary text-white hover:bg-primary/90"
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}
           >
-            {isComplete 
-              ? "Confirmar e Ir para Pagamento" 
-              : `Selecione mais ${remaining} sabor${remaining !== 1 ? "es" : ""}`
-            }
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Processando...
+              </>
+            ) : isComplete ? (
+              "Confirmar e Ir para Pagamento"
+            ) : (
+              `Selecione mais ${remaining} sabor${remaining !== 1 ? "es" : ""}`
+            )}
           </Button>
           <DrawerClose asChild>
-            <Button variant="ghost" className="w-full">
+            <Button variant="ghost" className="w-full" disabled={isLoading}>
               Cancelar
             </Button>
           </DrawerClose>

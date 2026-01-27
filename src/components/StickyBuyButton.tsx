@@ -1,14 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Star, ShoppingCart, Truck, Clock, Gift, Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSelectedKit } from "@/contexts/SelectedKitContext";
-
-declare global {
-  interface Window {
-    fbq: (...args: any[]) => void;
-    gtag: (...args: any[]) => void;
-  }
-}
+import FlavorSelectionDrawer from "./FlavorSelectionDrawer";
 
 const COUNTDOWN_DURATION = 90; // 1 minuto e 30 segundos
 const COUPON_CODE = "desconto10";
@@ -18,6 +12,7 @@ const StickyBuyButton = () => {
   const [timeLeft, setTimeLeft] = useState(COUNTDOWN_DURATION);
   const [showCoupon, setShowCoupon] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { selectedQuantity } = useSelectedKit();
 
   const quantities = [
@@ -103,48 +98,9 @@ const StickyBuyButton = () => {
     return () => window.removeEventListener("scroll", checkPrimaryButtonVisibility);
   }, []);
 
-  const checkoutUrls = {
-    1: "https://seguro.newhair.com.br/r/PQ783GIIJC",
-    3: "https://seguro.newhair.com.br/b/IMY736TK32O8",
-    6: "https://seguro.newhair.com.br/b/MGC781QXZFKG",
-    12: "https://seguro.newhair.com.br/b/AAG63FNQ2H44",
-  };
-
   const handlePurchase = () => {
     if (!selectedKit) return;
-
-    // Meta Pixel - AddToCart
-    if (typeof window.fbq === "function") {
-      window.fbq("track", "AddToCart", {
-        content_type: "product",
-        content_ids: [`kit-${selectedKit.value}`],
-        value: selectedKit.price,
-        currency: "BRL",
-      });
-    }
-
-    // GA4 - add_to_cart
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "add_to_cart", {
-        currency: "BRL",
-        value: selectedKit.price,
-        items: [
-          {
-            item_id: `kit-${selectedKit.value}`,
-            item_name: `New Hair - ${selectedKit.sublabel}`,
-            price: selectedKit.price,
-            quantity: 1,
-          },
-        ],
-      });
-    }
-
-    const checkoutUrl = checkoutUrls[selectedKit.value as keyof typeof checkoutUrls];
-
-    // Aguarda os pixels dispararem antes de redirecionar
-    setTimeout(() => {
-      window.open(checkoutUrl, "_blank");
-    }, 300);
+    setDrawerOpen(true);
   };
 
   const handleCopyCoupon = async () => {
@@ -322,6 +278,13 @@ const StickyBuyButton = () => {
           </div>
         </div>
       </div>
+
+      {/* Flavor Selection Drawer */}
+      <FlavorSelectionDrawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        kitQuantity={selectedQuantity}
+      />
     </>
   );
 };

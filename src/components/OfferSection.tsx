@@ -242,11 +242,6 @@ const OfferSection = () => {
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
         kitQuantity={selectedKitForDrawer}
-        onConfirm={(flavors) => {
-          // Here you can handle the checkout redirect with selected flavors
-          console.log("Selected flavors:", flavors);
-          // TODO: Integrate with checkout/Shopify
-        }}
       />
     </section>
   );

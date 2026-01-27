@@ -37,7 +37,7 @@ import productCarousel3 from "@/assets/product-carousel-3.jpg";
 import newHairLogoWhite from "@/assets/new-hair-logo-white.png";
 import giftJewelry from "@/assets/gift-jewelry-clean.png";
 import { useSelectedKit } from "@/contexts/SelectedKitContext";
-import ShopifyKitButton from "./ShopifyKitButton";
+import FlavorSelectionDrawer from "./FlavorSelectionDrawer";
 
 // Função para calcular datas de entrega (2 a 7 dias a partir de hoje)
 const getDeliveryDates = () => {
@@ -83,6 +83,8 @@ const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showReviews, setShowReviews] = useState(false);
   const [showJewelry, setShowJewelry] = useState(false);
+  const [flavorDrawerOpen, setFlavorDrawerOpen] = useState(false);
+  const [flavorDrawerQuantity, setFlavorDrawerQuantity] = useState<1 | 3 | 6>(1);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Swipe states for stories
@@ -480,11 +482,17 @@ const HeroSection = () => {
                     ))}
                   </div>
 
-                  {/* Shopify Kit Buy Button */}
+                  {/* Buy Button */}
                   <div onClick={(e) => e.stopPropagation()}>
-                    <ShopifyKitButton 
-                      kitType={storyQuantity === 1 ? "1-pote" : storyQuantity === 3 ? "3-potes" : "6-potes"} 
-                    />
+                    <Button 
+                      onClick={() => {
+                        setFlavorDrawerQuantity(storyQuantity);
+                        setFlavorDrawerOpen(true);
+                      }}
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
+                    >
+                      Comprar agora
+                    </Button>
                   </div>
 
                   {storyQuantity === 6 && (
@@ -816,11 +824,18 @@ const HeroSection = () => {
                     ))}
                   </div>
 
-                  {/* Shopify Kit Buy Button */}
+                  {/* Buy Button */}
                   <div id="primary-buy-button">
-                    <ShopifyKitButton 
-                      kitType={selectedQuantity === 1 ? "1-pote" : selectedQuantity === 3 ? "3-potes" : "6-potes"} 
-                    />
+                    <Button 
+                      onClick={() => {
+                        const qty = selectedQuantity === 12 ? 6 : selectedQuantity;
+                        setFlavorDrawerQuantity(qty as 1 | 3 | 6);
+                        setFlavorDrawerOpen(true);
+                      }}
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 text-base rounded-full"
+                    >
+                      Comprar agora
+                    </Button>
                   </div>
 
                   {/* Trust Badges */}
@@ -884,6 +899,11 @@ const HeroSection = () => {
       </div>
       <ReviewsPopup open={showReviews} onOpenChange={setShowReviews} />
       <JewelryPopup open={showJewelry} onOpenChange={setShowJewelry} />
+      <FlavorSelectionDrawer 
+        open={flavorDrawerOpen} 
+        onOpenChange={setFlavorDrawerOpen} 
+        kitQuantity={flavorDrawerQuantity} 
+      />
     </section>
   );
 };
