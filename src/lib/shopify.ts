@@ -6,31 +6,36 @@ const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${
 const SHOPIFY_STOREFRONT_TOKEN = '24a3567538b9fcd628b114f2a5ce6274';
 
 // Variant IDs for 1 unit of each flavor - each flavor maps to its respective product
-export const FLAVOR_VARIANT_IDS: Record<string, { id: string; sku: string; handle: string }> = {
+export const FLAVOR_VARIANT_IDS: Record<string, { id: string; sku: string; handle: string; name: string }> = {
   "cranberry": {
     id: "gid://shopify/ProductVariant/42319344074823",
     sku: "COL1.0209",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-cranberry"
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-cranberry",
+    name: "Cranberry"
   },
   "tangerina": {
     id: "gid://shopify/ProductVariant/42319344271431",
     sku: "COL1.0207",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-tangerina"
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-tangerina",
+    name: "Tangerina"
   },
   "pink-lemonade": {
     id: "gid://shopify/ProductVariant/42319105491015",
     sku: "COL1.0205",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-pink-lemonade"
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-pink-lemonade",
+    name: "Pink Lemonade"
   },
   "limao": {
     id: "gid://shopify/ProductVariant/42319344500807",
     sku: "COL1.0208",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-limao"
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-limao",
+    name: "Limão"
   },
   "frutas-tropicais": {
     id: "gid://shopify/ProductVariant/42319344697415",
     sku: "COL1.0210",
-    handle: "colageno-verisol®-com-acido-hialuronico-frutado-frutas-tropicais"
+    handle: "colageno-verisol®-com-acido-hialuronico-frutado-frutas-tropicais",
+    name: "Frutas Tropicais"
   },
 };
 
@@ -63,7 +68,7 @@ export const KIT_CONFIGURATIONS: Record<number, {
     gifts: ["cremeRetinol", "serumVitaB3"]
   },
   6: {
-    priceCents: 47770, // R$ 477,70 (atualizado conforme o exemplo)
+    priceCents: 47770, // R$ 477,70
     gifts: ["cremeRetinol", "serumVitaB3", "balmAlivioFlex"]
   }
 };
@@ -77,6 +82,8 @@ export interface CartAttribute {
   key: string;
   value: string;
 }
+
+export type FlavorQuantities = Record<string, number>;
 
 export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
@@ -143,11 +150,34 @@ function formatCheckoutUrl(checkoutUrl: string): string {
   }
 }
 
-function buildKitAttributes(flavorId: string, kitQuantity: number): CartAttribute[] {
-  const flavor = FLAVOR_VARIANT_IDS[flavorId];
+function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: number): CartAttribute[] {
   const kitConfig = KIT_CONFIGURATIONS[kitQuantity];
+  if (!kitConfig) return [];
+
+  // Get selected flavors with their quantities
+  const selectedFlavors = Object.entries(flavorQuantities)
+    .filter(([, qty]) => qty > 0)
+    .map(([flavorId, qty]) => ({ flavor: FLAVOR_VARIANT_IDS[flavorId], qty }));
+
+  if (selectedFlavors.length === 0) return [];
+
+  // Use first selected flavor as base handle (for kit identification)
+  const primaryFlavor = selectedFlavors[0].flavor;
+
+  // Build base variant IDs and SKUs (multiple flavors)
+  const baseVariantIds = selectedFlavors.map(({ flavor }) => 
+    flavor.id.replace('gid://shopify/ProductVariant/', '')
+  ).join(',');
   
-  if (!flavor || !kitConfig) return [];
+  const baseSkus = selectedFlavors.map(({ flavor }) => flavor.sku).join(',');
+
+  const baseVariantIdQty = selectedFlavors.map(({ flavor, qty }) => 
+    `${flavor.id.replace('gid://shopify/ProductVariant/', '')}:${qty}`
+  ).join('|');
+
+  const baseSkuQty = selectedFlavors.map(({ flavor, qty }) => 
+    `${flavor.sku}:${qty}`
+  ).join('|');
 
   // Build extra variant IDs and SKUs from gifts
   const extraVariantIds = kitConfig.gifts.map(giftKey => 
@@ -166,35 +196,38 @@ function buildKitAttributes(flavorId: string, kitQuantity: number): CartAttribut
     `${KIT_GIFT_VARIANTS[giftKey].sku}:1`
   ).join('|');
 
-  const baseVariantId = flavor.id.replace('gid://shopify/ProductVariant/', '');
-
   return [
     { key: "_kit", value: "true" },
     { key: "_kit_pack", value: String(kitQuantity) },
-    { key: "_kit_base_handle", value: flavor.handle },
+    { key: "_kit_base_handle", value: primaryFlavor.handle },
     { key: "_kit_product_handle", value: "kit-colageno-verisol®" },
     { key: "_kit_price_cents", value: String(kitConfig.priceCents) },
-    { key: "_kit_base_variant_ids", value: baseVariantId },
+    { key: "_kit_base_variant_ids", value: baseVariantIds },
     { key: "_kit_extra_variant_ids", value: extraVariantIds },
-    { key: "_kit_base_variant_id_qty", value: `${baseVariantId}:${kitQuantity}` },
+    { key: "_kit_base_variant_id_qty", value: baseVariantIdQty },
     { key: "_kit_extra_variant_id_qty", value: extraVariantIdQty },
-    { key: "_kit_base_skus", value: flavor.sku },
+    { key: "_kit_base_skus", value: baseSkus },
     { key: "_kit_extra_skus", value: extraSkus },
-    { key: "_kit_base_sku_qty", value: `${flavor.sku}:${kitQuantity}` },
+    { key: "_kit_base_sku_qty", value: baseSkuQty },
     { key: "_kit_extra_sku_qty", value: extraSkuQty },
   ];
 }
 
-function buildKitCartLines(flavorId: string, kitQuantity: number): CartLine[] {
-  const flavor = FLAVOR_VARIANT_IDS[flavorId];
+function buildKitCartLines(flavorQuantities: FlavorQuantities, kitQuantity: number): CartLine[] {
   const kitConfig = KIT_CONFIGURATIONS[kitQuantity];
-  
-  if (!flavor || !kitConfig) return [];
+  if (!kitConfig) return [];
 
-  const lines: CartLine[] = [
-    // Base product (collagen) with kit quantity
-    { merchandiseId: flavor.id, quantity: kitQuantity }
-  ];
+  const lines: CartLine[] = [];
+
+  // Add base products (collagen) with their quantities
+  Object.entries(flavorQuantities).forEach(([flavorId, qty]) => {
+    if (qty > 0) {
+      const flavor = FLAVOR_VARIANT_IDS[flavorId];
+      if (flavor) {
+        lines.push({ merchandiseId: flavor.id, quantity: qty });
+      }
+    }
+  });
 
   // Add gift products (1 each)
   kitConfig.gifts.forEach(giftKey => {
@@ -208,7 +241,7 @@ function buildKitCartLines(flavorId: string, kitQuantity: number): CartLine[] {
 }
 
 export async function createShopifyCheckout(
-  flavorId: string,
+  flavorQuantities: FlavorQuantities,
   kitQuantity: number
 ): Promise<string | null> {
   try {
@@ -216,19 +249,30 @@ export async function createShopifyCheckout(
     let attributes: CartAttribute[] = [];
 
     const isKitProduct = kitQuantity === 3 || kitQuantity === 6;
+    const totalSelected = Object.values(flavorQuantities).reduce((sum, qty) => sum + qty, 0);
 
     if (isKitProduct) {
-      // For kits 3 and 6: add base product + gifts with kit attributes
-      lines = buildKitCartLines(flavorId, kitQuantity);
-      attributes = buildKitAttributes(flavorId, kitQuantity);
+      // For kits 3 and 6: add base products + gifts with kit attributes
+      lines = buildKitCartLines(flavorQuantities, kitQuantity);
+      attributes = buildKitAttributes(flavorQuantities, kitQuantity);
     } else {
       // For single unit: just the flavor product
-      const flavor = FLAVOR_VARIANT_IDS[flavorId];
+      const selectedFlavorId = Object.entries(flavorQuantities).find(([, qty]) => qty > 0)?.[0];
+      if (!selectedFlavorId) {
+        toast.error("Selecione um sabor");
+        return null;
+      }
+      const flavor = FLAVOR_VARIANT_IDS[selectedFlavorId];
       if (!flavor) {
         toast.error("Sabor inválido");
         return null;
       }
       lines = [{ merchandiseId: flavor.id, quantity: 1 }];
+    }
+
+    if (lines.length === 0) {
+      toast.error("Nenhum produto selecionado");
+      return null;
     }
 
     const data = await storefrontApiRequest(CART_CREATE_MUTATION, {
