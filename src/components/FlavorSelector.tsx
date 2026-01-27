@@ -19,11 +19,11 @@ const FlavorSelector = ({
   totalFlavors,
 }: FlavorSelectorProps) => {
   const flavorOptions = [
-    { id: "cranberry", name: "Cranberry", emoji: "🍒", image: flavorCranberry, color: "#E91E8C" },
-    { id: "frutas-tropicais", name: "Frutas Tropicais", emoji: "🍍", image: flavorFrutasTropicais, color: "#D4A574" },
-    { id: "limao", name: "Limão", emoji: "🍋", image: flavorLimao, color: "#8BC34A" },
-    { id: "pink-lemonade", name: "Pink Lemonade", emoji: "🍹", image: flavorPinkLemonade, color: "#E91E8C" },
-    { id: "tangerina", name: "Tangerina", emoji: "🍊", image: flavorTangerina, color: "#FF8C00" },
+    { name: "Cranberry", emoji: "🍒", image: flavorCranberry, color: "#E91E8C" },
+    { name: "Frutas Tropicais", emoji: "🍍", image: flavorFrutasTropicais, color: "#D4A574" },
+    { name: "Limão", emoji: "🍋", image: flavorLimao, color: "#8BC34A" },
+    { name: "Pink Lemonade", emoji: "🍹", image: flavorPinkLemonade, color: "#E91E8C" },
+    { name: "Tangerina", emoji: "🍊", image: flavorTangerina, color: "#FF8C00" },
   ];
 
   const canAdd = totalFlavors < maxFlavors;
@@ -53,11 +53,11 @@ const FlavorSelector = ({
 
       <div className="space-y-2">
         {flavorOptions.map((flavor) => {
-          const quantity = flavors[flavor.id] || 0;
+          const quantity = flavors[flavor.name] || 0;
           
           return (
             <div
-              key={flavor.id}
+              key={flavor.name}
               className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                 quantity > 0
                   ? "border-primary bg-primary/5"
@@ -80,7 +80,7 @@ const FlavorSelector = ({
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => onFlavorChange(flavor.id, -1)}
+                  onClick={() => onFlavorChange(flavor.name, -1)}
                   disabled={quantity === 0}
                   className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
                     quantity > 0
@@ -95,7 +95,7 @@ const FlavorSelector = ({
                   {quantity}
                 </span>
                 <button
-                  onClick={() => onFlavorChange(flavor.id, 1)}
+                  onClick={() => onFlavorChange(flavor.name, 1)}
                   disabled={!canAdd}
                   className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                     canAdd
