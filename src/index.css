@@ -1,0 +1,339 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Renova Be - Collagen Anti-Aging Design System */
+/* Primary Color: #E91E8C (Pink Renova) */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%; /* #333333 */
+
+    --card: 30 20% 98%;
+    --card-foreground: 0 0% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+
+    /* Primary - Renova Be Pink #E91E8C */
+    --primary: 328 83% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Soft Beige/Cream */
+    --secondary: 30 30% 95%;
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 30 15% 96%;
+    --muted-foreground: 0 0% 40%; /* #666666 */
+
+    /* Accent - Deeper Pink/Magenta */
+    --accent: 328 75% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 30 10% 90%;
+    --input: 30 10% 90%;
+    --ring: 328 83% 52%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --gradient-hero: linear-gradient(135deg, hsl(30 30% 98%) 0%, hsl(30 20% 96%) 50%, hsl(30 30% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(328 83% 52%) 0%, hsl(328 75% 45%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(328 83% 52%) 0%, hsl(328 75% 45%) 100%);
+    --gradient-section: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(30 20% 97%) 100%);
+    
+    --shadow-soft: 0 4px 20px -4px hsl(328 83% 52% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(0 0% 20% / 0.08);
+    --shadow-elevated: 0 20px 50px -12px hsl(328 83% 52% / 0.2);
+
+    /* Fonts */
+    --font-display: 'Inter', 'Helvetica', sans-serif;
+    --font-body: 'Inter', 'Helvetica', sans-serif;
+
+    /* Glass Effect */
+    --glass-bg: hsl(0 0% 100% / 0.6);
+    --glass-border: hsl(0 0% 100% / 0.4);
+    --glass-shadow: 0 8px 32px hsl(328 83% 52% / 0.1);
+    --glass-blur: 16px;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 20 20% 8%;
+    --foreground: 30 20% 95%;
+
+    --card: 20 20% 12%;
+    --card-foreground: 30 20% 95%;
+
+    --popover: 20 20% 12%;
+    --popover-foreground: 30 20% 95%;
+
+    --primary: 328 83% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 20 20% 18%;
+    --secondary-foreground: 30 20% 95%;
+
+    --muted: 20 20% 18%;
+    --muted-foreground: 30 15% 55%;
+
+    --accent: 328 75% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 20 20% 22%;
+    --input: 20 20% 22%;
+    --ring: 328 83% 52%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-weight: 400;
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: #333333;
+  }
+
+  p, span, div {
+    color: #666666;
+  }
+
+  /* Hide scrollbar for carousel */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  .section-gradient {
+    background: var(--gradient-section);
+  }
+  
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .btn-primary-gradient {
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary-gradient:hover {
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-2px);
+  }
+
+  .card-elevated {
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+  }
+
+  .card-elevated:hover {
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-4px);
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .badge-highlight {
+    background: var(--gradient-gold);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Liquid Glass Effect */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-card-hover {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-hover:hover {
+    background: hsl(0 0% 100% / 0.75);
+    box-shadow: 0 12px 40px hsl(328 83% 52% / 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Text color utilities */
+  .text-title {
+    color: #333333;
+    font-weight: 700;
+  }
+
+  .text-body {
+    color: #666666;
+    font-weight: 400;
+  }
+
+  /* Scroll Animation for Carousel */
+  @keyframes scroll-x {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll-x {
+    animation: scroll-x 20s linear infinite;
+  }
+
+  .animate-scroll-x:hover {
+    animation-play-state: paused;
+  }
+
+  /* Timeline cards dark theme */
+  .timeline-card {
+    background: linear-gradient(135deg, hsl(160 30% 25%) 0%, hsl(160 35% 20%) 100%);
+  }
+}
+
+/* Shopify Buy Button - Full Width Override */
+.shopify-kit-button {
+  width: 100% !important;
+  margin-top: 8px !important;
+  display: block !important;
+}
+
+.shopify-kit-button > div,
+.shopify-kit-button > div > div,
+.shopify-kit-button > div > div > div,
+.shopify-kit-button > div > div > div > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.shopify-kit-button iframe {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+.shopify-kit-button .shopify-buy-frame,
+.shopify-kit-button .shopify-buy-frame--product {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Shopify Card Button Styles */
+.shopify-card-button {
+  width: 100% !important;
+}
+
+.shopify-card-button > div,
+.shopify-card-button > div > div,
+.shopify-card-button > div > div > div,
+.shopify-card-button > div > div > div > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.shopify-card-button iframe {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+.shopify-card-button .shopify-buy-frame,
+.shopify-card-button .shopify-buy-frame--product {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Hide WhatsApp widget from GTM */
+[class*="whatsapp"],
+[id*="whatsapp"],
+[class*="Whatsapp"],
+[id*="Whatsapp"],
+[class*="wa-widget"],
+[id*="wa-widget"],
+[class*="wa-button"],
+[id*="wa-button"],
+[class*="wati"],
+[id*="wati"],
+a[href*="api.whatsapp.com"],
+a[href*="wa.me"],
+div[style*="whatsapp"],
+iframe[src*="whatsapp"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
