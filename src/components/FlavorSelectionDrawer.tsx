@@ -10,7 +10,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { createShopifyCheckout, FLAVOR_VARIANT_IDS, KIT_VARIANT_IDS, CartLine } from "@/lib/shopify";
+import { createShopifyCheckout } from "@/lib/shopify";
 import flavorCranberry from "@/assets/flavor-cranberry.jpg";
 import flavorFrutasTropicais from "@/assets/flavor-frutas-tropicais.jpg";
 import flavorLimao from "@/assets/flavor-limao.jpg";
@@ -39,8 +39,7 @@ const FlavorSelectionDrawer = ({
   const [selectedFlavor, setSelectedFlavor] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Para kits 3 e 6, usamos o produto Kit Colágeno Verisol® com variante de quantidade
-  // Para kit 1, usamos o produto individual do sabor selecionado
+  // Para kits 3 e 6, incluímos brindes e atributos do kit
   const isKitProduct = kitQuantity === 3 || kitQuantity === 6;
 
   // Reset selection when drawer opens
@@ -56,24 +55,7 @@ const FlavorSelectionDrawer = ({
     setIsLoading(true);
     
     try {
-      let lines: CartLine[];
-
-      if (isKitProduct) {
-        // Para kits 3 e 6: usar variante do Kit Colágeno Verisol®
-        const kitVariantId = KIT_VARIANT_IDS[kitQuantity];
-        lines = [{
-          merchandiseId: kitVariantId,
-          quantity: 1,
-        }];
-      } else {
-        // Para kit 1: usar produto individual do sabor
-        lines = [{
-          merchandiseId: FLAVOR_VARIANT_IDS[selectedFlavor],
-          quantity: 1,
-        }];
-      }
-
-      const checkoutUrl = await createShopifyCheckout(lines);
+      const checkoutUrl = await createShopifyCheckout(selectedFlavor, kitQuantity);
       
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
