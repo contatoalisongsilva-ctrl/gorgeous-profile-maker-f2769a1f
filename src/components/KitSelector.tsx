@@ -1,7 +1,7 @@
 import { Truck } from "lucide-react";
-import kit1Img from "@/assets/kit-1-unidade.png";
-import kit3Img from "@/assets/kit-3-unidades.png";
-import kit6Img from "@/assets/kit-6-unidades.png";
+import kit1Img from "@/assets/kit-1-unidade.jpg";
+import kit3Img from "@/assets/kit-3-unidades.jpg";
+import kit6Img from "@/assets/kit-6-unidades.jpg";
 import { Button } from "./ui/button";
 
 interface KitSelectorProps {
