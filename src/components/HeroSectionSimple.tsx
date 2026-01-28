@@ -36,12 +36,15 @@ const HeroSectionSimple = () => {
       </div>
 
 
-      {/* Hero Banner - Image */}
+      {/* Hero Banner - Image (LCP optimized) */}
       <div className="relative w-full">
         <img 
           src={heroBanner} 
           alt="Colágeno Renova Be - Sonha com uma pele mais firme e saudável?" 
           className="w-full h-auto object-cover"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
         />
       </div>
 
