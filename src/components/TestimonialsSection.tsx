@@ -1,14 +1,13 @@
 import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX, Pause } from "lucide-react";
 import { useState, useRef, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import depoimento1 from "@/assets/depoimento-1.mp4";
 import depoimento2 from "@/assets/depoimento-2.mp4";
 import depoimento3 from "@/assets/depoimento-3.mp4";
 
 const TestimonialsSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
-  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1, 2]));
+  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1]));
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set());
   const [sectionInView, setSectionInView] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -73,12 +72,9 @@ const TestimonialsSection = () => {
   }];
   const videos = [{
     id: 0,
-    src: depoimento1
-  }, {
-    id: 1,
     src: depoimento2
   }, {
-    id: 2,
+    id: 1,
     src: depoimento3
   }];
   const handlePlayPause = (index: number) => {
