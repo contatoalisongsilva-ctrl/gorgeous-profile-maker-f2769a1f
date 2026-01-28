@@ -5,43 +5,63 @@ import depoimento1 from "@/assets/depoimento-1.mp4";
 import depoimento2 from "@/assets/depoimento-2.mp4";
 import depoimento3 from "@/assets/depoimento-3.mp4";
 import depoimento4 from "@/assets/depoimento-4.mp4";
+
 const TestimonialsSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
   const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1, 2, 3]));
+  const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set());
+  const [sectionInView, setSectionInView] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
     slidesToScroll: 1
   });
+
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
+
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on("select", onSelect);
     onSelect();
   }, [emblaApi, onSelect]);
 
-  // Force load first frame on all videos for mobile preview
+  // Lazy load section with IntersectionObserver
   useEffect(() => {
-    const loadVideoFrames = () => {
-      videoRefs.current.forEach((video) => {
-        if (video) {
-          video.load();
-          video.currentTime = 0.1;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSectionInView(true);
+          observer.disconnect();
         }
-      });
-    };
-    
-    // Small delay to ensure videos are mounted
-    const timer = setTimeout(loadVideoFrames, 100);
-    return () => clearTimeout(timer);
+      },
+      { rootMargin: "100px", threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
+
+  // Load first frame when video is loaded
+  const handleVideoLoaded = (index: number) => {
+    const video = videoRefs.current[index];
+    if (video) {
+      video.currentTime = 0.1;
+      setLoadedVideos(prev => new Set(prev).add(index));
+    }
+  };
   const stats = [{
     value: "22.000+",
     label: "Clientes satisfeitos"
@@ -96,7 +116,7 @@ const TestimonialsSection = () => {
     }
     setMutedVideos(newMuted);
   };
-  return <section className="py-10 md:py-12 bg-secondary" id="depoimentos">
+  return <section ref={sectionRef} className="py-10 md:py-12 bg-secondary" id="depoimentos">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary text-white rounded-full text-xs font-semibold uppercase tracking-widest mb-4">
@@ -120,28 +140,19 @@ const TestimonialsSection = () => {
                     {/* Loading background */}
                     <div className="absolute inset-0 bg-gradient-to-b from-muted to-muted/80" />
                     
-                    {/* Video */}
-                    <video 
-                      ref={el => videoRefs.current[index] = el} 
-                      src={video.src} 
-                      className="absolute inset-0 w-full h-full object-cover" 
-                      loop 
-                      muted={mutedVideos.has(index)} 
-                      playsInline 
-                      preload="auto"
-                      onLoadedData={(e) => {
-                        // Seek to first frame for preview on mobile
-                        const videoEl = e.currentTarget;
-                        videoEl.currentTime = 0.1;
-                      }}
-                      onSeeked={(e) => {
-                        // Keep video paused after seeking for preview
-                        const videoEl = e.currentTarget;
-                        if (playingVideo !== index) {
-                          videoEl.pause();
-                        }
-                      }}
-                    />
+                    {/* Video - only load when section is in view */}
+                    {sectionInView && (
+                      <video 
+                        ref={el => videoRefs.current[index] = el} 
+                        src={video.src} 
+                        className="absolute inset-0 w-full h-full object-cover" 
+                        loop 
+                        muted={mutedVideos.has(index)} 
+                        playsInline 
+                        preload="metadata"
+                        onLoadedData={() => handleVideoLoaded(index)}
+                      />
+                    )}
 
                     {/* Overlay gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
