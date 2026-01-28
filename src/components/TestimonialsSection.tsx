@@ -4,12 +4,11 @@ import useEmblaCarousel from "embla-carousel-react";
 import depoimento1 from "@/assets/depoimento-1.mp4";
 import depoimento2 from "@/assets/depoimento-2.mp4";
 import depoimento3 from "@/assets/depoimento-3.mp4";
-import depoimento4 from "@/assets/depoimento-4.mp4";
 
 const TestimonialsSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
-  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1, 2, 3]));
+  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1, 2]));
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set());
   const [sectionInView, setSectionInView] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -81,9 +80,6 @@ const TestimonialsSection = () => {
   }, {
     id: 2,
     src: depoimento3
-  }, {
-    id: 3,
-    src: depoimento4
   }];
   const handlePlayPause = (index: number) => {
     const video = videoRefs.current[index];
