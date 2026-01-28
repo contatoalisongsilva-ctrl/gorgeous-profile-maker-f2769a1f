@@ -2,11 +2,12 @@ import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX, Pause } from "lucide
 import { useState, useRef, useCallback, useEffect } from "react";
 import depoimento2 from "@/assets/depoimento-2.mp4";
 import depoimento3 from "@/assets/depoimento-3.mp4";
+import depoimento4 from "@/assets/depoimento-4.mp4";
 
 const TestimonialsSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
-  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1]));
+  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([0, 1, 2]));
   const [sectionInView, setSectionInView] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
@@ -15,6 +16,7 @@ const TestimonialsSection = () => {
   const videos = [
     { id: 0, src: depoimento2 },
     { id: 1, src: depoimento3 },
+    { id: 2, src: depoimento4 },
   ];
 
   const scrollTo = useCallback((index: number) => {
