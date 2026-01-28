@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import resultadoSemana1 from "@/assets/resultado-semana-1.png";
-import resultadoSemana2 from "@/assets/resultado-semana-2.png";
-import resultadoSemana4 from "@/assets/resultado-semana-4.png";
-import resultadoSemana8 from "@/assets/resultado-semana-8.png";
+import resultadoSemana1 from "@/assets/resultado-semana-1.jpg";
+import resultadoSemana2 from "@/assets/resultado-semana-2.jpg";
+import resultadoSemana4 from "@/assets/resultado-semana-4.jpg";
+import resultadoSemana8 from "@/assets/resultado-semana-8.jpg";
 
 const ResultsSection = () => {
   const [progress, setProgress] = useState(0);
