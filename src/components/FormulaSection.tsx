@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import { useState, useCallback, useEffect } from "react";
-import useEmblaCarousel from "embla-carousel-react";
+import { useState, useCallback, useRef } from "react";
 import ingredientCollagen from "@/assets/ingredient-collagen.webp";
 import ingredientHyaluronic from "@/assets/ingredient-hyaluronic.webp";
 import ingredientOrange from "@/assets/ingredient-orange.webp";
@@ -13,30 +12,7 @@ import logoHaplexPlus from "@/assets/logo-haplex-plus.webp";
 const FormulaSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [openTech, setOpenTech] = useState<string | null>(null);
-  
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: true, 
-    align: "start",
-    slidesToScroll: 1,
-  });
-
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    emblaApi.on("select", onSelect);
-    onSelect();
-  }, [emblaApi, onSelect]);
-
-  const toggleTech = (name: string) => {
-    setOpenTech(openTech === name ? null : name);
-  };
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const ingredients = [
     { 
@@ -77,6 +53,38 @@ const FormulaSection = () => {
     },
   ];
 
+  const scrollTo = useCallback((index: number) => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const slideWidth = container.scrollWidth / ingredients.length;
+    container.scrollTo({ left: slideWidth * index, behavior: "smooth" });
+    setSelectedIndex(index);
+  }, [ingredients.length]);
+
+  const scrollPrev = useCallback(() => {
+    const newIndex = selectedIndex === 0 ? ingredients.length - 1 : selectedIndex - 1;
+    scrollTo(newIndex);
+  }, [selectedIndex, ingredients.length, scrollTo]);
+
+  const scrollNext = useCallback(() => {
+    const newIndex = selectedIndex === ingredients.length - 1 ? 0 : selectedIndex + 1;
+    scrollTo(newIndex);
+  }, [selectedIndex, ingredients.length, scrollTo]);
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const slideWidth = container.scrollWidth / ingredients.length;
+    const newIndex = Math.round(container.scrollLeft / slideWidth);
+    if (newIndex !== selectedIndex && newIndex >= 0 && newIndex < ingredients.length) {
+      setSelectedIndex(newIndex);
+    }
+  }, [ingredients.length, selectedIndex]);
+
+  const toggleTech = (name: string) => {
+    setOpenTech(openTech === name ? null : name);
+  };
+
   const technologies = [
     {
       name: "Tecnologia Verisol®",
@@ -99,7 +107,7 @@ const FormulaSection = () => {
           </h2>
         </div>
 
-        {/* Ingredients Carousel */}
+        {/* Ingredients Carousel with Native Scroll-Snap */}
         <div className="relative max-w-5xl mx-auto mb-14">
           <button 
             onClick={scrollPrev}
@@ -108,46 +116,49 @@ const FormulaSection = () => {
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
           
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">
-              {ingredients.map((ingredient) => (
-                <div 
-                  key={ingredient.name} 
-                  className="flex-[0_0_50%] md:flex-[0_0_25%] min-w-0 px-2"
-                >
-                  <div className="bg-white rounded-2xl border border-border overflow-hidden h-full shadow-sm">
-                    {/* Image */}
-                    <div className="aspect-square bg-secondary overflow-hidden">
-                      <img 
-                        src={ingredient.image} 
-                        alt={ingredient.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+          <div 
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {ingredients.map((ingredient) => (
+              <div 
+                key={ingredient.name} 
+                className="flex-shrink-0 w-[50%] md:w-[25%] snap-start"
+              >
+                <div className="bg-white rounded-2xl border border-border overflow-hidden h-full shadow-sm">
+                  {/* Image */}
+                  <div className="aspect-square bg-secondary overflow-hidden">
+                    <img 
+                      src={ingredient.image} 
+                      alt={ingredient.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-4">
+                    <h3 className="font-semibold text-foreground text-sm mb-1.5">{ingredient.name}</h3>
+                    <p className="text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
+                      {ingredient.description}
+                    </p>
                     
-                    {/* Content */}
-                    <div className="p-4">
-                      <h3 className="font-semibold text-foreground text-sm mb-1.5">{ingredient.name}</h3>
-                      <p className="text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
-                        {ingredient.description}
-                      </p>
-                      
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-1">
-                        {ingredient.tags.map((tag) => (
-                          <span 
-                            key={tag}
-                            className="px-2 py-0.5 bg-muted text-muted-foreground text-[9px] rounded-full font-medium uppercase tracking-wide"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1">
+                      {ingredient.tags.map((tag) => (
+                        <span 
+                          key={tag}
+                          className="px-2 py-0.5 bg-muted text-muted-foreground text-[9px] rounded-full font-medium uppercase tracking-wide"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
           <button 

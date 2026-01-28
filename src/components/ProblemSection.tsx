@@ -1,7 +1,5 @@
 import { Check } from "lucide-react";
-import { useState, useCallback, useEffect } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 import problemRugasTesta from "@/assets/problem-rugas-testa.jpg";
 import problemFlacidez from "@/assets/problem-flacidez.jpg";
@@ -10,11 +8,8 @@ import problemAspectoCansado from "@/assets/problem-aspecto-cansado.jpg";
 
 const ProblemSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "center" },
-    [Autoplay({ delay: 3500, stopOnInteraction: false })]
-  );
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
   const problems = [
     {
@@ -39,24 +34,61 @@ const ProblemSection = () => {
     },
   ];
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
+  const scrollTo = useCallback((index: number) => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const slideWidth = container.scrollWidth / problems.length;
+    container.scrollTo({ left: slideWidth * index, behavior: "smooth" });
+  }, [problems.length]);
 
+  // Handle scroll to update selected index
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const slideWidth = container.scrollWidth / problems.length;
+    const newIndex = Math.round(container.scrollLeft / slideWidth);
+    if (newIndex !== selectedIndex && newIndex >= 0 && newIndex < problems.length) {
+      setSelectedIndex(newIndex);
+    }
+  }, [problems.length, selectedIndex]);
+
+  // Autoplay with loop
   useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
+    const startAutoplay = () => {
+      autoplayRef.current = setInterval(() => {
+        setSelectedIndex((prev) => {
+          const next = (prev + 1) % problems.length;
+          scrollTo(next);
+          return next;
+        });
+      }, 3500);
     };
-  }, [emblaApi, onSelect]);
 
-  const scrollTo = useCallback(
-    (index: number) => emblaApi && emblaApi.scrollTo(index),
-    [emblaApi]
-  );
+    startAutoplay();
+
+    return () => {
+      if (autoplayRef.current) {
+        clearInterval(autoplayRef.current);
+      }
+    };
+  }, [problems.length, scrollTo]);
+
+  // Pause autoplay on interaction
+  const handleInteraction = () => {
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current);
+    }
+    // Resume after 5 seconds
+    autoplayRef.current = setTimeout(() => {
+      autoplayRef.current = setInterval(() => {
+        setSelectedIndex((prev) => {
+          const next = (prev + 1) % problems.length;
+          scrollTo(next);
+          return next;
+        });
+      }, 3500);
+    }, 5000) as unknown as NodeJS.Timeout;
+  };
 
   return (
     <section className="py-10 md:py-12 bg-secondary" id="problema">
@@ -75,33 +107,38 @@ const ProblemSection = () => {
             </p>
           </div>
 
-          {/* Carousel */}
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">
-              {problems.map((problem, index) => (
-                <div
-                  key={problem.id}
-                  className="flex-[0_0_85%] md:flex-[0_0_60%] min-w-0 px-2"
-                >
-                  <div className={`bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
-                    selectedIndex === index ? 'scale-100 opacity-100' : 'scale-95 opacity-70'
-                  }`}>
-                    <div className="aspect-[4/3] overflow-hidden">
-                      <img
-                        src={problem.image}
-                        alt={problem.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-4 bg-[#0d0d0d]">
-                      <h3 className="font-semibold text-base md:text-lg text-white text-center tracking-tight">
-                        {problem.title}
-                      </h3>
-                    </div>
+          {/* Native Scroll-Snap Carousel */}
+          <div 
+            ref={scrollRef}
+            onScroll={handleScroll}
+            onTouchStart={handleInteraction}
+            onMouseDown={handleInteraction}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {problems.map((problem, index) => (
+              <div
+                key={problem.id}
+                className="flex-shrink-0 w-[85%] md:w-[60%] snap-center"
+              >
+                <div className={`bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
+                  selectedIndex === index ? 'scale-100 opacity-100' : 'scale-95 opacity-70'
+                }`}>
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={problem.image}
+                      alt={problem.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4 bg-[#0d0d0d]">
+                    <h3 className="font-semibold text-base md:text-lg text-white text-center tracking-tight">
+                      {problem.title}
+                    </h3>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
           {/* Dots */}
@@ -109,7 +146,11 @@ const ProblemSection = () => {
             {problems.map((_, index) => (
               <button
                 key={index}
-                onClick={() => scrollTo(index)}
+                onClick={() => {
+                  handleInteraction();
+                  scrollTo(index);
+                  setSelectedIndex(index);
+                }}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   selectedIndex === index
                     ? 'bg-primary w-8'
