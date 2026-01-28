@@ -6,6 +6,65 @@
     <!-- WapStore mock to prevent GTM errors -->
     <script>window.WapStore = window.WapStore || {};</script>
     
+    <!-- Block specific tracking scripts -->
+    <script>
+      (function() {
+        // List of scripts to block
+        var blockedPatterns = [
+          'criteo',
+          'taboola',
+          'tiktok',
+          'analytics.tiktok',
+          'kwai',
+          'hotjar',
+          'static.hotjar',
+          'script.hotjar'
+        ];
+        
+        // Override createElement to intercept script creation
+        var originalCreateElement = document.createElement.bind(document);
+        document.createElement = function(tagName) {
+          var element = originalCreateElement(tagName);
+          if (tagName.toLowerCase() === 'script') {
+            var originalSetAttribute = element.setAttribute.bind(element);
+            element.setAttribute = function(name, value) {
+              if (name === 'src' && value) {
+                for (var i = 0; i < blockedPatterns.length; i++) {
+                  if (value.toLowerCase().indexOf(blockedPatterns[i]) !== -1) {
+                    console.log('[Blocked Script]:', value);
+                    return;
+                  }
+                }
+              }
+              return originalSetAttribute(name, value);
+            };
+            
+            Object.defineProperty(element, 'src', {
+              set: function(value) {
+                if (value) {
+                  for (var i = 0; i < blockedPatterns.length; i++) {
+                    if (value.toLowerCase().indexOf(blockedPatterns[i]) !== -1) {
+                      console.log('[Blocked Script]:', value);
+                      return;
+                    }
+                  }
+                }
+                originalSetAttribute('src', value);
+              },
+              get: function() {
+                return element.getAttribute('src');
+              }
+            });
+          }
+          return element;
+        };
+        
+        // Block Hotjar specifically
+        window.hj = function() { console.log('[Blocked]: Hotjar call'); };
+        window._hjSettings = { hjid: 0, hjsv: 0 };
+      })();
+    </script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
