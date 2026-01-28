@@ -26,6 +26,22 @@ const TestimonialsSection = () => {
     emblaApi.on("select", onSelect);
     onSelect();
   }, [emblaApi, onSelect]);
+
+  // Force load first frame on all videos for mobile preview
+  useEffect(() => {
+    const loadVideoFrames = () => {
+      videoRefs.current.forEach((video) => {
+        if (video) {
+          video.load();
+          video.currentTime = 0.1;
+        }
+      });
+    };
+    
+    // Small delay to ensure videos are mounted
+    const timer = setTimeout(loadVideoFrames, 100);
+    return () => clearTimeout(timer);
+  }, []);
   const stats = [{
     value: "22.000+",
     label: "Clientes satisfeitos"
@@ -100,9 +116,32 @@ const TestimonialsSection = () => {
           <div className="overflow-hidden px-4" ref={emblaRef}>
             <div className="flex">
               {videos.map((video, index) => <div key={video.id} className="flex-[0_0_80%] md:flex-[0_0_33%] min-w-0 px-2">
-                  <div className="relative rounded-[2rem] overflow-hidden bg-secondary aspect-[9/16] group cursor-pointer shadow-xl" onClick={() => handlePlayPause(index)}>
+                  <div className="relative rounded-[2rem] overflow-hidden bg-muted aspect-[9/16] group cursor-pointer shadow-xl" onClick={() => handlePlayPause(index)}>
+                    {/* Loading background */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-muted to-muted/80" />
+                    
                     {/* Video */}
-                    <video ref={el => videoRefs.current[index] = el} src={video.src} className="absolute inset-0 w-full h-full object-cover" loop muted={mutedVideos.has(index)} playsInline preload="metadata" />
+                    <video 
+                      ref={el => videoRefs.current[index] = el} 
+                      src={video.src} 
+                      className="absolute inset-0 w-full h-full object-cover" 
+                      loop 
+                      muted={mutedVideos.has(index)} 
+                      playsInline 
+                      preload="auto"
+                      onLoadedData={(e) => {
+                        // Seek to first frame for preview on mobile
+                        const videoEl = e.currentTarget;
+                        videoEl.currentTime = 0.1;
+                      }}
+                      onSeeked={(e) => {
+                        // Keep video paused after seeking for preview
+                        const videoEl = e.currentTarget;
+                        if (playingVideo !== index) {
+                          videoEl.pause();
+                        }
+                      }}
+                    />
 
                     {/* Overlay gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
