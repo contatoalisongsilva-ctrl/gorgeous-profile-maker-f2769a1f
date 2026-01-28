@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import ReviewsPopup from "./ReviewsPopup";
-import heroBanner from "@/assets/hero-banner-new.jpeg";
+import heroBanner from "@/assets/hero-banner-new.jpg";
 import renovaBeLogo from "@/assets/renova-be-logo-white.png";
 
 const features = [
