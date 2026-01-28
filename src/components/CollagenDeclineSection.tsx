@@ -1,5 +1,5 @@
-import collagenChart from "@/assets/collagen-chart.png";
-import collagenSkin from "@/assets/collagen-skin.png";
+import collagenChart from "@/assets/collagen-chart.jpg";
+import collagenSkin from "@/assets/collagen-skin.jpg";
 
 const CollagenDeclineSection = () => {
   return (

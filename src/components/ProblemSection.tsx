@@ -3,10 +3,10 @@ import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-import problemRugasTesta from "@/assets/problem-rugas-testa.png";
-import problemFlacidez from "@/assets/problem-flacidez.png";
-import problemPeGalinha from "@/assets/problem-pe-galinha.png";
-import problemAspectoCansado from "@/assets/problem-aspecto-cansado.png";
+import problemRugasTesta from "@/assets/problem-rugas-testa.jpg";
+import problemFlacidez from "@/assets/problem-flacidez.jpg";
+import problemPeGalinha from "@/assets/problem-pe-galinha.jpg";
+import problemAspectoCansado from "@/assets/problem-aspecto-cansado.jpg";
 
 const ProblemSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
