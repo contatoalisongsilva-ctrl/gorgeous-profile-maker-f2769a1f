@@ -123,7 +123,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
                 {/* Gifts */}
                 {kit.gifts && kit.gifts.length > 0 && (
                   <div className="mt-2 text-[10px] text-muted-foreground">
-                    <span className="font-medium text-foreground">+ Brindes:</span>
+                    <span className="font-medium text-foreground">Leve também:</span>
                     {kit.gifts.map((gift, index) => (
                       <span key={index} className="block">
                         🎁 {gift}
@@ -216,7 +216,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
                   {/* Gifts */}
                   {kit.gifts && kit.gifts.length > 0 && (
                     <div className="mt-2 text-[10px] text-muted-foreground">
-                      <span className="font-medium text-foreground">+ Brindes:</span>
+                      <span className="font-medium text-foreground">Leve também:</span>
                       {kit.gifts.map((gift, index) => (
                         <span key={index} className="block">
                           🎁 {gift}
