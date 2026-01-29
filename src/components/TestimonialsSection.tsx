@@ -52,9 +52,15 @@ const TestimonialsSection = () => {
 
   // Lazy load section with IntersectionObserver
   useEffect(() => {
+    // Fallback (alguns browsers/mobile podem não disparar o observer como esperado)
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      setSectionInView(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting || entry.intersectionRatio > 0) {
           setSectionInView(true);
           observer.disconnect();
         }
@@ -79,7 +85,17 @@ const TestimonialsSection = () => {
 
   const handlePlayPause = (index: number) => {
     const video = videoRefs.current[index];
-    if (!video) return;
+    if (!video) {
+      // Garante que o <video> renderize (e o preview fique visível) antes de tentar dar play
+      setSectionInView(true);
+      requestAnimationFrame(() => {
+        const v = videoRefs.current[index];
+        if (!v) return;
+        v.play();
+        setPlayingVideo(index);
+      });
+      return;
+    }
     if (playingVideo === index) {
       video.pause();
       setPlayingVideo(null);
@@ -148,6 +164,15 @@ const TestimonialsSection = () => {
                 >
                   {/* Loading background */}
                   <div className="absolute inset-0 bg-gradient-to-b from-muted to-muted/80" />
+
+                  {/* Preview image (sempre visível, resolve o branco no mobile) */}
+                  <img
+                    src={video.poster}
+                    alt="Prévia do depoimento"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                    draggable={false}
+                  />
                   
                   {/* Video - only load when section is in view */}
                   {sectionInView && (
