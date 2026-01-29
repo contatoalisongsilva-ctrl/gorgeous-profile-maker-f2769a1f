@@ -82,7 +82,7 @@ const OfferSection = () => {
     {
       icon: Truck,
       title: "Frete Grátis",
-      description: "Acima de R$ 199",
+      description: "Acima de R$ 250",
       emoji: "🚚",
     },
     {
