@@ -188,7 +188,7 @@ const FormulaSection = () => {
                       <img 
                         src={tech.logo} 
                         alt={tech.name}
-                        className="max-h-14 max-w-[160px] w-full object-contain"
+                        className="h-full w-full object-contain"
                       />
                     </div>
                     <h3 className="font-semibold text-foreground text-sm md:text-base">{tech.name}</h3>
