@@ -4,14 +4,7 @@
     <meta charset="UTF-8" />
     
     <!-- WapStore mock to prevent GTM errors -->
-    <script>
-      window.WapStore = window.WapStore || {
-        product: { id: null, name: '', price: 0 },
-        cart: { id: null, items: [], total: 0 },
-        customer: { id: null, email: '' },
-        order: { id: null }
-      };
-    </script>
+    <script>window.WapStore = window.WapStore || {};</script>
     
 
     <!-- Google Tag Manager -->
