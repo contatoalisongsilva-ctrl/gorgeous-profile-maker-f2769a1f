@@ -3,6 +3,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import depoimento2 from "@/assets/depoimento-2.mp4";
 import depoimento3 from "@/assets/depoimento-3.mp4";
 import depoimento4 from "@/assets/depoimento-4.mp4";
+import videoPoster1 from "@/assets/video-poster-1.jpg";
+import videoPoster2 from "@/assets/video-poster-2.jpg";
+import videoPoster3 from "@/assets/video-poster-3.jpg";
 
 const TestimonialsSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -14,9 +17,9 @@ const TestimonialsSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const videos = [
-    { id: 0, src: depoimento2 },
-    { id: 1, src: depoimento3 },
-    { id: 2, src: depoimento4 },
+    { id: 0, src: depoimento2, poster: videoPoster1 },
+    { id: 1, src: depoimento3, poster: videoPoster2 },
+    { id: 2, src: depoimento4, poster: videoPoster3 },
   ];
 
   const scrollTo = useCallback((index: number) => {
@@ -150,7 +153,8 @@ const TestimonialsSection = () => {
                   {sectionInView && (
                     <video 
                       ref={el => videoRefs.current[index] = el} 
-                      src={video.src} 
+                      src={video.src}
+                      poster={video.poster}
                       className="absolute inset-0 w-full h-full object-cover" 
                       loop 
                       muted={mutedVideos.has(index)} 
