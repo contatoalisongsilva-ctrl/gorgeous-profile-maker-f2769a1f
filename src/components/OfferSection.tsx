@@ -121,15 +121,15 @@ const OfferSection = () => {
 
         {/* Flavor Selection Drawer */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerContent className="max-h-[90vh]">
-            <DrawerHeader className="text-center pb-2">
-              <DrawerTitle className="text-lg font-bold">
+          <DrawerContent className="max-h-[85vh]">
+            <DrawerHeader className="text-center py-2">
+              <DrawerTitle className="text-base font-bold">
                 Escolha seus sabores - Kit {selectedKit}
               </DrawerTitle>
             </DrawerHeader>
-            <div className="px-4 pb-6 overflow-y-auto">
+            <div className="px-3 pb-4 overflow-y-auto">
               {/* Flavor Selector */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <FlavorSelector
                   flavors={flavors}
                   onFlavorChange={handleFlavorChange}
@@ -142,7 +142,7 @@ const OfferSection = () => {
               <Button
                 onClick={handleCheckout}
                 disabled={!isFlavorComplete || isLoading}
-                className={`w-full py-6 text-base font-semibold rounded-xl transition-all ${
+                className={`w-full py-5 text-base font-semibold rounded-xl transition-all ${
                   isFlavorComplete && !isLoading
                     ? "bg-primary text-white hover:bg-primary/90"
                     : "bg-muted text-muted-foreground cursor-not-allowed"
@@ -161,11 +161,11 @@ const OfferSection = () => {
               </Button>
 
               {/* Delivery info */}
-              <div className="mt-4 p-3 bg-blue-50 rounded-xl flex items-start gap-3">
-                <span className="text-blue-500 text-lg">⚡</span>
+              <div className="mt-3 p-2 bg-blue-50 rounded-xl flex items-start gap-2">
+                <span className="text-blue-500 text-sm">⚡</span>
                 <div>
-                  <p className="font-semibold text-xs text-foreground">ENTREGA FULL – Envio imediato em até 24h</p>
-                  <p className="text-[11px] text-muted-foreground">Comprando dentro das próximas 7h 34 min</p>
+                  <p className="font-semibold text-[11px] text-foreground">ENTREGA FULL – Envio imediato em até 24h</p>
+                  <p className="text-[10px] text-muted-foreground">Comprando dentro das próximas 7h 34 min</p>
                 </div>
               </div>
             </div>

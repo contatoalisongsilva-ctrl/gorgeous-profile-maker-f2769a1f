@@ -30,81 +30,80 @@ const FlavorSelector = ({
   const isComplete = totalFlavors === maxFlavors;
 
   return (
-    <div className="bg-white rounded-2xl border border-border p-4 space-y-4">
+    <div className="bg-white rounded-xl border border-border p-3 space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-foreground text-sm">
+        <h3 className="font-semibold text-foreground text-xs">
           Escolha seus sabores:
         </h3>
         <div className="text-right">
-          <span className="text-xs text-muted-foreground">Progresso da seleção</span>
-          <span className={`block text-sm font-bold ${isComplete ? "text-green-600" : "text-primary"}`}>
+          <span className={`text-sm font-bold ${isComplete ? "text-green-600" : "text-primary"}`}>
             {totalFlavors}/{maxFlavors}
           </span>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
         <div 
           className={`h-full transition-all duration-300 ${isComplete ? "bg-green-500" : "bg-primary"}`}
           style={{ width: `${(totalFlavors / maxFlavors) * 100}%` }}
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {flavorOptions.map((flavor) => {
           const quantity = flavors[flavor.name] || 0;
           
           return (
             <div
               key={flavor.name}
-              className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
+              className={`flex items-center justify-between p-2 rounded-lg border transition-all ${
                 quantity > 0
                   ? "border-primary bg-primary/5"
                   : "border-border bg-white"
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <img 
                   src={flavor.image} 
                   alt={flavor.name}
-                  className="w-10 h-10 object-cover rounded-lg"
+                  className="w-8 h-8 object-cover rounded-md"
                 />
                 <span 
-                  className="font-medium text-sm"
+                  className="font-medium text-xs"
                   style={{ color: flavor.color }}
                 >
                   {flavor.name}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => onFlavorChange(flavor.name, -1)}
                   disabled={quantity === 0}
-                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
+                  className={`w-7 h-7 rounded-full border flex items-center justify-center transition-colors ${
                     quantity > 0
                       ? "border-border bg-background hover:bg-muted"
                       : "border-border bg-muted cursor-not-allowed opacity-50"
                   }`}
                   aria-label={`Remover ${flavor.name}`}
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="w-3 h-3" />
                 </button>
-                <span className="w-6 text-center font-bold text-foreground">
+                <span className="w-5 text-center font-bold text-foreground text-sm">
                   {quantity}
                 </span>
                 <button
                   onClick={() => onFlavorChange(flavor.name, 1)}
                   disabled={!canAdd}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
                     canAdd
                       ? "bg-primary text-white hover:bg-primary/90"
                       : "bg-muted cursor-not-allowed opacity-50"
                   }`}
                   aria-label={`Adicionar ${flavor.name}`}
                 >
-                  <Plus className="w-4 h-4 text-white" />
+                  <Plus className="w-3 h-3 text-white" />
                 </button>
               </div>
             </div>
