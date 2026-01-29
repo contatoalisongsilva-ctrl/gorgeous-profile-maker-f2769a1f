@@ -19,11 +19,11 @@ const FlavorSelector = ({
   totalFlavors,
 }: FlavorSelectorProps) => {
   const flavorOptions = [
-    { name: "Cranberry", emoji: "🍒", image: flavorCranberry, color: "#E91E8C" },
-    { name: "Frutas Tropicais", emoji: "🍍", image: flavorFrutasTropicais, color: "#D4A574" },
-    { name: "Limão", emoji: "🍋", image: flavorLimao, color: "#8BC34A" },
-    { name: "Pink Lemonade", emoji: "🍹", image: flavorPinkLemonade, color: "#E91E8C" },
-    { name: "Tangerina", emoji: "🍊", image: flavorTangerina, color: "#FF8C00" },
+    { name: "Cranberry", image: flavorCranberry, color: "#E91E8C" },
+    { name: "Frutas Tropicais", image: flavorFrutasTropicais, color: "#D4A574" },
+    { name: "Limão", image: flavorLimao, color: "#8BC34A" },
+    { name: "Pink Lemonade", image: flavorPinkLemonade, color: "#E91E8C" },
+    { name: "Tangerina", image: flavorTangerina, color: "#FF8C00" },
   ];
 
   const canAdd = totalFlavors < maxFlavors;
@@ -74,7 +74,7 @@ const FlavorSelector = ({
                   className="font-medium text-sm"
                   style={{ color: flavor.color }}
                 >
-                  {flavor.emoji} {flavor.name}
+                  {flavor.name}
                 </span>
               </div>
 
