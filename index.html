@@ -4,7 +4,15 @@
     <meta charset="UTF-8" />
     
     <!-- WapStore mock to prevent GTM errors -->
-    <script>window.WapStore = window.WapStore || {};</script>
+    <script>
+      // WapStore mock to prevent GTM errors
+      window.WapStore = window.WapStore || {
+        product: { id: null, name: null, price: null },
+        cart: { items: [], total: 0 },
+        customer: { id: null, email: null },
+        order: { id: null }
+      };
+    </script>
     
     <!-- Block specific tracking scripts -->
     <script>
