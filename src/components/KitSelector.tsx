@@ -1,5 +1,5 @@
 import { Truck } from "lucide-react";
-import kit1Img from "@/assets/kit-1-unidade.jpg";
+import kit1Img from "@/assets/kit-1-unidade-new.webp";
 import kit3Img from "@/assets/kit-3-unidades.jpg";
 import kit6Img from "@/assets/kit-6-unidades.jpg";
 import { Button } from "./ui/button";
@@ -21,7 +21,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
       originalPrice: 149.9,
       discount: 21,
       badge: null,
-      gifts: ["1x Creme Retinol"],
+      gifts: ["1x TikBalm", "1x Sérum Vitamina C"],
       hasFreeShipping: false,
     },
     {
@@ -33,7 +33,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
       originalPrice: 449.7,
       discount: 40,
       badge: { text: "MAIS VENDIDO", color: "bg-primary" },
-      gifts: ["1x Retinol", "1x Sérum"],
+      gifts: ["1x TikBalm", "1x Sérum Vitamina C"],
       hasFreeShipping: true,
     },
     {
@@ -45,7 +45,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
       originalPrice: 899.4,
       discount: 47,
       badge: { text: "MELHOR OFERTA", color: "bg-green-500" },
-      gifts: ["1x Retinol", "1x Sérum", "1x Balm"],
+      gifts: ["1x TikBalm", "1x Sérum Vitamina C"],
       hasFreeShipping: true,
     },
   ];
