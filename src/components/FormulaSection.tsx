@@ -184,11 +184,11 @@ const FormulaSection = () => {
                   className="w-full p-5 flex items-center justify-between hover:bg-muted transition-colors min-h-[72px]"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-36 h-14 flex items-center justify-center bg-white rounded-lg px-2">
+                    <div className="w-44 h-16 flex items-center justify-center bg-white rounded-xl p-3 shadow-sm">
                       <img 
                         src={tech.logo} 
                         alt={tech.name}
-                        className="max-h-12 max-w-[130px] w-full object-contain"
+                        className="max-h-14 max-w-[160px] w-full object-contain"
                       />
                     </div>
                     <h3 className="font-semibold text-foreground text-sm md:text-base">{tech.name}</h3>
