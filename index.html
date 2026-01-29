@@ -21,6 +21,37 @@
           'script.hotjar'
         ];
         
+        // Allowlist - never block these domains
+        var allowedPatterns = [
+          'facebook',
+          'fbevents',
+          'connect.facebook.net',
+          'google',
+          'googletagmanager',
+          'gtm.js'
+        ];
+        
+        function isAllowed(url) {
+          var lowerUrl = url.toLowerCase();
+          for (var i = 0; i < allowedPatterns.length; i++) {
+            if (lowerUrl.indexOf(allowedPatterns[i]) !== -1) {
+              return true;
+            }
+          }
+          return false;
+        }
+        
+        function isBlocked(url) {
+          if (isAllowed(url)) return false;
+          var lowerUrl = url.toLowerCase();
+          for (var i = 0; i < blockedPatterns.length; i++) {
+            if (lowerUrl.indexOf(blockedPatterns[i]) !== -1) {
+              return true;
+            }
+          }
+          return false;
+        }
+        
         // Override createElement to intercept script creation
         var originalCreateElement = document.createElement.bind(document);
         document.createElement = function(tagName) {
@@ -28,26 +59,18 @@
           if (tagName.toLowerCase() === 'script') {
             var originalSetAttribute = element.setAttribute.bind(element);
             element.setAttribute = function(name, value) {
-              if (name === 'src' && value) {
-                for (var i = 0; i < blockedPatterns.length; i++) {
-                  if (value.toLowerCase().indexOf(blockedPatterns[i]) !== -1) {
-                    console.log('[Blocked Script]:', value);
-                    return;
-                  }
-                }
+              if (name === 'src' && value && isBlocked(value)) {
+                console.log('[Blocked Script]:', value);
+                return;
               }
               return originalSetAttribute(name, value);
             };
             
             Object.defineProperty(element, 'src', {
               set: function(value) {
-                if (value) {
-                  for (var i = 0; i < blockedPatterns.length; i++) {
-                    if (value.toLowerCase().indexOf(blockedPatterns[i]) !== -1) {
-                      console.log('[Blocked Script]:', value);
-                      return;
-                    }
-                  }
+                if (value && isBlocked(value)) {
+                  console.log('[Blocked Script]:', value);
+                  return;
                 }
                 originalSetAttribute('src', value);
               },
