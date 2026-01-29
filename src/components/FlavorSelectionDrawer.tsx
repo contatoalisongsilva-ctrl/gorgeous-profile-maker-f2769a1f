@@ -79,8 +79,8 @@ const FlavorSelectionDrawer = ({
       const checkoutUrl = await createShopifyCheckout(flavorQuantities, kitQuantity);
       
       if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
-        onOpenChange(false);
+        // Use location.href instead of window.open to work in Instagram's in-app browser
+        window.location.href = checkoutUrl;
       }
     } finally {
       setIsLoading(false);

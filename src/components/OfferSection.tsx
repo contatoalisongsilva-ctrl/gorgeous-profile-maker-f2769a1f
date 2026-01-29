@@ -64,8 +64,8 @@ const OfferSection = () => {
       const checkoutUrl = await createShopifyCheckout(flavors, kitQuantity);
 
       if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
-        setIsDrawerOpen(false);
+        // Use location.href instead of window.open to work in Instagram's in-app browser
+        window.location.href = checkoutUrl;
       }
     } finally {
       setIsLoading(false);
