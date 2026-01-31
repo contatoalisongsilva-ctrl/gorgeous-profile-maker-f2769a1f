@@ -32,7 +32,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
       totalPrice: 267.7,
       originalPrice: 449.7,
       discount: 40,
-      badge: { text: "MAIS VENDIDO", color: "bg-primary" },
+      badge: null,
       gifts: ["1x TikBalm", "1x Sérum Vitamina C"],
       hasFreeShipping: true,
     },
