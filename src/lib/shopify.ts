@@ -5,15 +5,15 @@ const SHOPIFY_STORE_PERMANENT_DOMAIN = 'renova-be.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 const SHOPIFY_STOREFRONT_TOKEN = '24a3567538b9fcd628b114f2a5ce6274';
 
-// Kit product with variants for 1x, 3x, 6x
+// Kit product A1 for main page (versao-a) with variants for 1x, 3x, 6x
 export const KIT_PRODUCT = {
-  productId: "gid://shopify/Product/7376358539335",
-  handle: "kit-colageno-verisol",
-  baseHandle: "colageno-verisol",
+  productId: "gid://shopify/Product/7415497883719",
+  handle: "kit-colageno-verisol-a1-lovable-rugas",
+  baseHandle: "colageno-verisol-a1",
   variants: {
-    1: { variantId: "gid://shopify/ProductVariant/42322028986439", priceCents: 11770 },
-    3: { variantId: "gid://shopify/ProductVariant/42322029019207", priceCents: 26770 },
-    6: { variantId: "gid://shopify/ProductVariant/42322029051975", priceCents: 47770 }
+    1: { variantId: "gid://shopify/ProductVariant/42450247254087", priceCents: 11770 },
+    3: { variantId: "gid://shopify/ProductVariant/42450247286855", priceCents: 26770 },
+    6: { variantId: "gid://shopify/ProductVariant/42450247319623", priceCents: 47770 }
   }
 };
 
