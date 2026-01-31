@@ -7,6 +7,8 @@ import problemFlacidez from "@/assets/problem-flacidez.jpg";
 import problemPeGalinha from "@/assets/problem-pe-galinha.jpg";
 import problemAspectoCansado from "@/assets/problem-aspecto-cansado.jpg";
 
+import problemCansadoNew from "@/assets/problem-cansado-new.jpg";
+
 const problems = [
   {
     text: "Rugas ao redor dos olhos que dependem a cada dia?",
@@ -14,11 +16,11 @@ const problems = [
   },
   {
     text: "Linhas na boca que parecem mais marcadas nas fotos?",
-    image: problemRugasTesta,
+    image: problemAspectoCansado,
   },
   {
     text: "Rosto com aspecto de \"cansado\" mesmo depois de dormir bem?",
-    image: problemAspectoCansado,
+    image: problemCansadoNew,
   },
   {
     text: "Pescoço com perda de firmeza e flacidez?",
