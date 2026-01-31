@@ -17,7 +17,6 @@ const FAQSectionB = lazy(() => import("@/components/versao-b/FAQSectionB"));
 const FooterB = lazy(() => import("@/components/versao-b/FooterB"));
 
 // Shared components (reused from original)
-const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const FlavorSection = lazy(() => import("@/components/FlavorSection"));
 const OfferSection = lazy(() => import("@/components/OfferSection"));
 const NutritionSection = lazy(() => import("@/components/NutritionSection"));
@@ -62,12 +61,7 @@ const IndexB = () => {
           <ComparisonSectionB />
         </Suspense>
         
-        {/* 7. PROVA SOCIAL - Depoimentos (reused) */}
-        <Suspense fallback={<SectionLoader />}>
-          <TestimonialsSection />
-        </Suspense>
-        
-        {/* 8. SABORES + OFERTA - Kits de Preço */}
+        {/* 7. SABORES + OFERTA - Kits de Preço */}
         <Suspense fallback={<SectionLoader />}>
           <FlavorSection />
           <OfferSection />
