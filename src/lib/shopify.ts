@@ -17,6 +17,18 @@ export const KIT_PRODUCT = {
   }
 };
 
+// Kit product B1 for versao-b page (separate tracking)
+export const KIT_PRODUCT_B1 = {
+  productId: "gid://shopify/Product/7415497916487",
+  handle: "kit-colageno-verisol-b1-lovable-rugas",
+  baseHandle: "colageno-verisol-b1",
+  variants: {
+    1: { variantId: "gid://shopify/ProductVariant/42450247352391", priceCents: 11770 },
+    3: { variantId: "gid://shopify/ProductVariant/42450247385159", priceCents: 26770 },
+    6: { variantId: "gid://shopify/ProductVariant/42450247417927", priceCents: 47770 }
+  }
+};
+
 // Mapeamento sabor → variant ID + SKU (usando nomes como chave)
 export const FLAVOR_VARIANTS: Record<string, { variantId: string; sku: string; name: string }> = {
   "Cranberry": { variantId: "42319344566343", sku: "COL1.0209", name: "Cranberry" },
@@ -140,8 +152,12 @@ function buildItensDescription(flavorQuantities: FlavorQuantities, kitQuantity: 
   return items.join(", ");
 }
 
-function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: number): CartAttribute[] {
-  const kitVariant = KIT_PRODUCT.variants[kitQuantity as keyof typeof KIT_PRODUCT.variants];
+function buildKitAttributes(
+  flavorQuantities: FlavorQuantities, 
+  kitQuantity: number,
+  kitProduct = KIT_PRODUCT
+): CartAttribute[] {
+  const kitVariant = kitProduct.variants[kitQuantity as keyof typeof kitProduct.variants];
   if (!kitVariant) return [];
 
   // Build base arrays from selected flavors
@@ -185,8 +201,8 @@ function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: num
   return [
     { key: "_kit", value: "true" },
     { key: "_kit_pack", value: String(kitQuantity) },
-    { key: "_kit_base_handle", value: KIT_PRODUCT.baseHandle },
-    { key: "_kit_product_handle", value: KIT_PRODUCT.handle },
+    { key: "_kit_base_handle", value: kitProduct.baseHandle },
+    { key: "_kit_product_handle", value: kitProduct.handle },
     { key: "_kit_price_cents", value: String(kitVariant.priceCents) },
     { key: "Itens", value: itensDescription },
     { key: "_kit_base_variant_ids", value: baseVariantIds.join(",") },
@@ -202,10 +218,11 @@ function buildKitAttributes(flavorQuantities: FlavorQuantities, kitQuantity: num
 
 export async function createShopifyCheckout(
   flavorQuantities: FlavorQuantities,
-  kitQuantity: number
+  kitQuantity: number,
+  kitProduct = KIT_PRODUCT
 ): Promise<string | null> {
   try {
-    const kitVariant = KIT_PRODUCT.variants[kitQuantity as keyof typeof KIT_PRODUCT.variants];
+    const kitVariant = kitProduct.variants[kitQuantity as keyof typeof kitProduct.variants];
     
     if (!kitVariant) {
       toast.error("Kit inválido");
@@ -220,7 +237,7 @@ export async function createShopifyCheckout(
     }
 
     // Build kit attributes
-    const attributes = buildKitAttributes(flavorQuantities, kitQuantity);
+    const attributes = buildKitAttributes(flavorQuantities, kitQuantity, kitProduct);
 
     // Create cart with single kit variant + attributes
     const lines: CartLine[] = [{
