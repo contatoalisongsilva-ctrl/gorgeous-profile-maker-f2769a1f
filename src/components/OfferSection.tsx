@@ -125,13 +125,16 @@ const OfferSection = () => {
               onClick={() => setIsCarPromoOpen(true)}
               className="w-full bg-white border-2 border-foreground rounded-xl p-4 flex items-center justify-between gap-4 hover:bg-secondary/50 transition-all group"
             >
-              <div className="text-left">
-                <p className="text-foreground font-bold text-sm">
-                  🎉 Você está concorrendo a um carro 0km!
-                </p>
-                <p className="text-muted-foreground text-xs">
-                  Toque para ver como funciona
-                </p>
+              <div className="flex items-center gap-3">
+                <Car className="w-6 h-6 text-foreground flex-shrink-0" />
+                <div className="text-left">
+                  <p className="text-foreground font-bold text-sm">
+                    Você está concorrendo a um carro 0km!
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    Toque para ver como funciona
+                  </p>
+                </div>
               </div>
               <div className="text-muted-foreground text-xs group-hover:text-foreground transition-colors flex-shrink-0">
                 →
