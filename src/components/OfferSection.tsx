@@ -3,7 +3,7 @@ import { Loader2, Truck, Shield, Award, ThumbsUp, Car } from "lucide-react";
 import { useSelectedKit } from "@/contexts/SelectedKitContext";
 import KitSelector from "./KitSelector";
 import FlavorSelector from "./FlavorSelector";
-import { createShopifyCheckout } from "@/lib/shopify";
+import { createShopifyCheckout, KIT_PRODUCT } from "@/lib/shopify";
 import { Button } from "./ui/button";
 import {
   Drawer,
@@ -13,7 +13,11 @@ import {
 } from "./ui/drawer";
 import CarPromoPopup from "./CarPromoPopup";
 
-const OfferSection = () => {
+interface OfferSectionProps {
+  kitProduct?: typeof KIT_PRODUCT;
+}
+
+const OfferSection = ({ kitProduct = KIT_PRODUCT }: OfferSectionProps) => {
   const { setSelectedQuantity } = useSelectedKit();
   const [selectedKit, setSelectedKit] = useState<"1x" | "3x" | "6x">("3x");
   const [flavors, setFlavors] = useState<Record<string, number>>({});
@@ -63,7 +67,7 @@ const OfferSection = () => {
 
     try {
       const kitQuantity = selectedKit === "1x" ? 1 : selectedKit === "3x" ? 3 : 6;
-      const checkoutUrl = await createShopifyCheckout(flavors, kitQuantity);
+      const checkoutUrl = await createShopifyCheckout(flavors, kitQuantity, kitProduct);
 
       if (checkoutUrl) {
         // Use location.href instead of window.open to work in Instagram's in-app browser

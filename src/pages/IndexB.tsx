@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { SelectedKitProvider } from "@/contexts/SelectedKitContext";
+import { KIT_PRODUCT_B1 } from "@/lib/shopify";
 
 // Eager load - Above the fold
 import HeroSectionB from "@/components/versao-b/HeroSectionB";
@@ -19,10 +20,12 @@ const FAQSectionB = lazy(() => import("@/components/versao-b/FAQSectionB"));
 const FooterB = lazy(() => import("@/components/versao-b/FooterB"));
 
 // Shared components (reused from original)
-
-const OfferSection = lazy(() => import("@/components/OfferSection"));
+const OfferSectionLazy = lazy(() => import("@/components/OfferSection"));
 const NutritionSection = lazy(() => import("@/components/NutritionSection"));
 const StickyBuyButton = lazy(() => import("@/components/StickyBuyButton"));
+
+// Wrapper to pass B1 product to OfferSection
+const OfferSectionB1 = () => <OfferSectionLazy kitProduct={KIT_PRODUCT_B1} />;
 
 // Minimal loading placeholder
 const SectionLoader = () => (
@@ -75,7 +78,7 @@ const IndexB = () => {
         
         {/* 8. OFERTA - Kits de Preço */}
         <Suspense fallback={<SectionLoader />}>
-          <OfferSection />
+          <OfferSectionB1 />
         </Suspense>
         
         
