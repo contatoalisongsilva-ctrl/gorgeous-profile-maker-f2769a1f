@@ -1,7 +1,7 @@
 import collagenGif from "@/assets/collagen-absorption.gif";
 import logoVerisol from "@/assets/logo-verisol.png";
 import logoHaplex from "@/assets/logo-haplex-plus.webp";
-import { Sparkles } from "lucide-react";
+import logoVitaminC from "@/assets/vitamin-c-logo.webp";
 
 const ingredients = [
   {
@@ -15,7 +15,7 @@ const ingredients = [
     description: "Ácido hialurônico de alta absorção que hidrata profundamente e preenche a pele de dentro para fora.",
   },
   {
-    icon: Sparkles,
+    logo: logoVitaminC,
     name: "Vitamina C",
     description: "Potente antioxidante que potencializa a síntese de colágeno e protege contra o envelhecimento precoce.",
   },
@@ -60,19 +60,13 @@ const ComparisonSectionB = () => {
                   key={index}
                   className="bg-secondary/30 rounded-xl p-4 flex items-start gap-4"
                 >
-                  {item.logo ? (
-                    <div className="w-16 h-12 flex-shrink-0 flex items-center justify-center">
-                      <img 
-                        src={item.logo} 
-                        alt={item.name}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  ) : item.icon ? (
-                    <div className="w-12 h-12 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
-                      <item.icon className="w-6 h-6 text-primary" />
-                    </div>
-                  ) : null}
+                  <div className="w-16 h-12 flex-shrink-0 flex items-center justify-center">
+                    <img 
+                      src={item.logo} 
+                      alt={item.name}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-foreground text-sm mb-1">
                       {item.name}
