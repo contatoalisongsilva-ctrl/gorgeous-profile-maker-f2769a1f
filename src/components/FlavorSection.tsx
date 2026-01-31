@@ -31,36 +31,43 @@ const FlavorSection = () => {
           </p>
         </div>
 
-        <div className="max-w-xs mx-auto">
-          {/* Main Image */}
-          <div className="aspect-square rounded-2xl overflow-hidden mb-4">
-            <img
-              src={selectedFlavor.image}
-              alt={selectedFlavor.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
+        <div className="max-w-md mx-auto">
+          {/* Layout: Names on left, Image on right */}
+          <div className="flex items-center gap-4">
+            {/* Flavor Names List - Left */}
+            <div className="bg-secondary/30 rounded-xl p-3 flex-shrink-0">
+              <div className="flex flex-col gap-1">
+                {flavors.map((flavor) => (
+                  <button
+                    key={flavor.name}
+                    onClick={() => setSelectedFlavor(flavor)}
+                    className={`
+                      text-xs py-2 px-3 rounded-lg text-left transition-all duration-200 whitespace-nowrap
+                      ${selectedFlavor.name === flavor.name 
+                        ? 'bg-white shadow-sm font-semibold' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
+                      }
+                    `}
+                    style={{ 
+                      color: selectedFlavor.name === flavor.name ? flavor.color : undefined 
+                    }}
+                  >
+                    {flavor.name}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-          {/* Flavor Names List */}
-          <div className="flex flex-col items-center gap-1">
-            {flavors.map((flavor) => (
-              <button
-                key={flavor.name}
-                onClick={() => setSelectedFlavor(flavor)}
-                className={`
-                  text-sm py-1.5 px-3 rounded-full transition-all duration-200
-                  ${selectedFlavor.name === flavor.name 
-                    ? 'font-semibold' 
-                    : 'text-muted-foreground hover:text-foreground'
-                  }
-                `}
-                style={{ 
-                  color: selectedFlavor.name === flavor.name ? flavor.color : undefined 
-                }}
-              >
-                {flavor.name}
-              </button>
-            ))}
+            {/* Image - Right */}
+            <div className="flex-1 flex items-center justify-center">
+              <div className="w-40 h-40 rounded-xl overflow-hidden">
+                <img
+                  src={selectedFlavor.image}
+                  alt={selectedFlavor.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
