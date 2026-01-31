@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const problems = [
   "Rugas ao redor dos olhos que dependem a cada dia?",
@@ -39,22 +39,18 @@ const ProblemSectionB = () => {
               <button
                 key={index}
                 onClick={() => toggleItem(index)}
-                className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
+                className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left ${
                   checkedItems.includes(index)
                     ? "border-primary bg-primary/5"
-                    : "border-border bg-white hover:border-primary/30"
+                    : "border-border bg-white"
                 }`}
               >
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all ${
                   checkedItems.includes(index)
-                    ? "border-primary bg-primary"
-                    : "border-muted-foreground/30"
-                }`}>
-                  {checkedItems.includes(index) && (
-                    <Check className="w-4 h-4 text-white" />
-                  )}
-                </div>
-                <span className={`text-sm md:text-base ${
+                    ? "bg-primary"
+                    : "bg-muted-foreground/40"
+                }`} />
+                <span className={`text-sm md:text-base leading-relaxed ${
                   checkedItems.includes(index) ? "text-foreground font-medium" : "text-muted-foreground"
                 }`}>
                   {problem}
