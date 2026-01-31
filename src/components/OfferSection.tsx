@@ -121,28 +121,28 @@ const OfferSection = () => {
           <KitSelector selectedKit={selectedKit} onKitChange={handleKitChange} onBuyClick={handleBuyClick} />
         </div>
 
-        {/* Car Promo Banner - Only shows when 6x is selected */}
-        {selectedKit === "6x" && (
+        {/* Car Promo Banner - Shows when 3x or 6x is selected */}
+        {(selectedKit === "3x" || selectedKit === "6x") && (
           <div className="max-w-3xl mx-auto mb-10">
             <button
               onClick={() => setIsCarPromoOpen(true)}
-              className="w-full bg-gradient-to-r from-primary to-primary/80 rounded-xl p-4 flex items-center justify-between gap-4 hover:shadow-lg transition-all group"
+              className="w-full bg-gradient-to-r from-foreground to-foreground/90 rounded-xl p-4 flex items-center justify-between gap-4 hover:shadow-lg transition-all group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <Car className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Car className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
                   <p className="text-white font-bold text-sm">
                     🎉 Você está concorrendo a um carro 0km!
                   </p>
-                  <p className="text-white/80 text-xs">
-                    Kit 6 potes = 1 número da sorte para o Volkswagen Tera
+                  <p className="text-white/70 text-xs">
+                    Toque para ver como funciona
                   </p>
                 </div>
               </div>
-              <div className="text-white/80 text-xs underline group-hover:text-white transition-colors flex-shrink-0">
-                Saiba mais →
+              <div className="text-white/60 text-xs group-hover:text-white transition-colors flex-shrink-0">
+                →
               </div>
             </button>
           </div>
