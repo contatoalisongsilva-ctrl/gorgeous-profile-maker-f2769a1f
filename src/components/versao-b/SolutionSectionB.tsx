@@ -53,7 +53,7 @@ const SolutionSectionB = () => {
               <img 
                 src={productWoman} 
                 alt="Mulher usando Colágeno Verisol Renova Be"
-                className="w-full h-auto object-cover scale-150 origin-top"
+                className="w-full h-auto object-cover scale-110 origin-top"
                 loading="lazy"
               />
             </div>
