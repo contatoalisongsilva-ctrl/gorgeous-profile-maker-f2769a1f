@@ -19,37 +19,35 @@ const ChoiceSectionB = () => {
             O tempo vai passar de qualquer forma. A diferença está no que você decide fazer agora.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid md:grid-cols-2 gap-3 md:gap-4">
             {/* Opção 1 - Negativa */}
-            <div className="bg-white border border-border rounded-2xl p-6 text-left opacity-70">
-              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                <TrendingDown className="w-6 h-6 text-muted-foreground" />
+            <div className="bg-white border border-border rounded-xl p-4 text-left opacity-70">
+              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center mb-2">
+                <TrendingDown className="w-4 h-4 text-muted-foreground" />
               </div>
-              <h3 className="font-bold text-foreground mb-2">
+              <h3 className="font-bold text-foreground text-sm mb-1">
                 Deixar o tempo agir sozinho
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Aceitar que as rugas vão se aprofundar, a flacidez vai aumentar e, aos poucos, 
-                você vai deixando de se reconhecer no espelho.
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Aceitar que as rugas vão se aprofundar e a flacidez vai aumentar.
               </p>
             </div>
 
             {/* Opção 2 - Positiva */}
             <button 
               onClick={scrollToSolution}
-              className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary rounded-2xl p-6 text-left transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer"
+              className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary rounded-xl p-4 text-left transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-                <Sparkles className="w-6 h-6 text-primary" />
+              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mb-2">
+                <Sparkles className="w-4 h-4 text-primary" />
               </div>
-              <h3 className="font-bold text-foreground mb-2">
+              <h3 className="font-bold text-foreground text-sm mb-1">
                 Ser a sua melhor versão
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                Assumir a sua idade com orgulho — sem querer parecer mais nova, 
-                mas <strong className="text-foreground">sendo a versão mais bonita e confiante de si mesma</strong>.
+              <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                Assumir a sua idade com orgulho — <strong className="text-foreground">sendo a versão mais bonita de si mesma</strong>.
               </p>
-              <span className="inline-flex items-center gap-1 text-primary font-semibold text-sm">
+              <span className="inline-flex items-center gap-1 text-primary font-semibold text-xs">
                 Escolher esse caminho →
               </span>
             </button>
