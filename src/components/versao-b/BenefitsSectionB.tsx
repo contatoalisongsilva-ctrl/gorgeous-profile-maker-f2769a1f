@@ -58,48 +58,51 @@ const timeline: {
 
 const BenefitsSectionB = () => {
   return (
-    <section className="py-12 md:py-16 bg-primary/10">
+    <section className="py-8 md:py-12 bg-primary/10">
       <div className="container mx-auto px-4">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-md mx-auto">
           {/* Header */}
-          <div className="text-center mb-10">
-            <span className="inline-block px-5 py-2 bg-primary/20 text-primary rounded-full text-xs font-semibold uppercase tracking-widest mb-4">
+          <div className="text-center mb-6">
+            <span className="inline-block px-3 py-1 bg-primary/20 text-primary rounded-full text-[10px] font-semibold uppercase tracking-wider mb-2">
               O Que Esperar
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
               Cronograma de Resultados
             </h2>
-            <p className="text-muted-foreground text-sm md:text-base">
-              Cada corpo responde de forma única, mas milhares de clientes relatam melhorias significativas seguindo este cronograma.
+            <p className="text-muted-foreground text-xs md:text-sm">
+              Cada corpo responde de forma única, mas milhares de clientes relatam melhorias significativas.
             </p>
           </div>
 
           {/* Timeline */}
-          <div className="relative pl-16 md:pl-20">
+          <div className="relative pl-12 md:pl-14">
             {/* Vertical line */}
-            <div className="absolute left-[22px] md:left-[26px] top-6 bottom-6 w-1 bg-primary/30 rounded-full" />
+            <div className="absolute left-[16px] md:left-[18px] top-4 bottom-4 w-0.5 bg-primary/30 rounded-full" />
             
-            <div className="space-y-6">
+            <div className="space-y-3">
               {timeline.map((item, index) => (
                 <div key={index} className="relative">
                   {/* Icon circle */}
-                  <div className="absolute -left-16 md:-left-20 w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center z-10 bg-white">
-                    <item.Icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                  <div className="absolute -left-12 md:-left-14 w-8 h-8 rounded-full flex items-center justify-center z-10 bg-white shadow-sm">
+                    <item.Icon className="w-4 h-4 text-primary" />
                   </div>
                   
                   {/* Card */}
-                  <div className="bg-white rounded-xl p-5 shadow-lg">
-                    <span className="text-xs font-bold uppercase tracking-wide text-primary">
-                      {item.label}
-                    </span>
-                    <h3 className="font-bold text-foreground text-lg mt-1 mb-3">
-                      {item.title}
-                    </h3>
-                    <ul className="space-y-2">
+                  <div className="bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-primary">
+                        {item.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground">—</span>
+                      <h3 className="font-semibold text-foreground text-sm">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <ul className="space-y-0.5">
                       {item.results.map((result, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 bg-primary" />
-                          <span className="text-sm text-muted-foreground">{result}</span>
+                        <li key={idx} className="flex items-start gap-1.5">
+                          <span className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0 bg-primary" />
+                          <span className="text-xs text-muted-foreground">{result}</span>
                         </li>
                       ))}
                     </ul>
@@ -110,14 +113,14 @@ const BenefitsSectionB = () => {
           </div>
 
           {/* Tip Box */}
-          <div className="mt-10 bg-primary/20 rounded-2xl p-6 text-center border border-primary/30">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Lightbulb className="w-5 h-5 text-primary" />
-              <span className="font-bold text-primary text-lg">Dica Importante</span>
+          <div className="mt-6 bg-primary/20 rounded-xl p-4 text-center border border-primary/30">
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <Lightbulb className="w-4 h-4 text-primary" />
+              <span className="font-semibold text-primary text-sm">Dica Importante</span>
             </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-xs leading-relaxed">
               Para melhores resultados, mantenha o uso contínuo por pelo menos <strong className="text-foreground">90 dias</strong>. 
-              É o tempo que seu corpo precisa para regenerar o colágeno e você sentir a transformação completa.
+              É o tempo que seu corpo precisa para regenerar o colágeno.
             </p>
           </div>
         </div>
