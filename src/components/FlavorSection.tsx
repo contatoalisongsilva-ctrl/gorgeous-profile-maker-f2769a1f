@@ -32,9 +32,20 @@ const FlavorSection = () => {
         </div>
 
         <div className="max-w-md mx-auto">
-          {/* Layout: Names on left, Image on right */}
+          {/* Layout: Image on left, Names on right */}
           <div className="flex items-center gap-4">
-            {/* Flavor Names List - Left */}
+            {/* Image - Left */}
+            <div className="flex-1 flex items-center justify-center">
+              <div className="w-40 h-40 rounded-xl overflow-hidden">
+                <img
+                  src={selectedFlavor.image}
+                  alt={selectedFlavor.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Flavor Names List - Right */}
             <div className="bg-secondary/30 rounded-xl p-3 flex-shrink-0">
               <div className="flex flex-col gap-1">
                 {flavors.map((flavor) => (
@@ -55,17 +66,6 @@ const FlavorSection = () => {
                     {flavor.name}
                   </button>
                 ))}
-              </div>
-            </div>
-
-            {/* Image - Right */}
-            <div className="flex-1 flex items-center justify-center">
-              <div className="w-40 h-40 rounded-xl overflow-hidden">
-                <img
-                  src={selectedFlavor.image}
-                  alt={selectedFlavor.name}
-                  className="w-full h-full object-cover"
-                />
               </div>
             </div>
           </div>
