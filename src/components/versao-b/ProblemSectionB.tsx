@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 
-// Placeholder images - you can replace these with actual problem images
-import problemRugasTesta from "@/assets/problem-rugas-testa.jpg";
-import problemFlacidez from "@/assets/problem-flacidez.jpg";
-import problemPeGalinha from "@/assets/problem-pe-galinha.jpg";
-import problemAspectoCansado from "@/assets/problem-aspecto-cansado.jpg";
-
-import problemCansadoNew from "@/assets/problem-cansado-new.jpg";
+import problemPeGalinha from "@/assets/problem-b-pe-galinha.jpg";
+import problemLinhasBoca from "@/assets/problem-b-linhas-boca.jpg";
+import problemCansado from "@/assets/problem-b-cansado.jpg";
+import problemFlacidez from "@/assets/problem-b-flacidez.jpg";
 
 const problems = [
   {
@@ -16,11 +13,11 @@ const problems = [
   },
   {
     text: "Linhas na boca que parecem mais marcadas nas fotos?",
-    image: problemAspectoCansado,
+    image: problemLinhasBoca,
   },
   {
     text: "Rosto com aspecto de \"cansado\" mesmo depois de dormir bem?",
-    image: problemCansadoNew,
+    image: problemCansado,
   },
   {
     text: "Pescoço com perda de firmeza e flacidez?",
