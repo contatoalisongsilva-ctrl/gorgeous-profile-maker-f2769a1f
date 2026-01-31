@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Zap, Droplets, ShieldCheck } from "lucide-react";
 import productPot from "@/assets/product-pot.png";
 import logoVerisol from "@/assets/logo-verisol.png";
 import logoHaplex from "@/assets/logo-haplex-plus.webp";
@@ -13,17 +13,17 @@ const benefits = [
 
 const tripleAction = [
   {
-    emoji: "🔵",
+    Icon: Zap,
     title: "ESTIMULA COLÁGENO PRÓPRIO",
     description: "A tecnologia Verisol® é a única que leva o colágeno diretamente até a derme — onde as rugas nascem. Seu corpo passa a produzir mais colágeno de volta.",
   },
   {
-    emoji: "🔵",
+    Icon: Droplets,
     title: "PREENCHE AS RUGAS DE DENTRO",
     description: "O Ácido Hialurônico retém água em profundidade, preenchendo as linhas finas e devolvendo volume ao rosto.",
   },
   {
-    emoji: "🔵",
+    Icon: ShieldCheck,
     title: "PROTEGE E DESACELERA O ENVELHECIMENTO",
     description: "Antioxidantes potentes combatem os radicais livres que aceleram a degradação da pele, freando a aparição de novas rugas.",
   },
@@ -97,7 +97,9 @@ const SolutionSectionB = () => {
                   className="bg-white border border-border rounded-xl p-5 shadow-sm"
                 >
                   <div className="flex items-start gap-3">
-                    <span className="text-2xl">{action.emoji}</span>
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <action.Icon className="w-5 h-5 text-primary" />
+                    </div>
                     <div>
                       <h4 className="font-bold text-foreground mb-1 text-sm uppercase tracking-wide">
                         {action.title}

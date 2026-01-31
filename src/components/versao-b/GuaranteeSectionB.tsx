@@ -11,7 +11,7 @@ const GuaranteeSectionB = () => {
             </div>
             
             <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">
-              🛡️ GARANTIA TOTAL DE 30 DIAS
+              GARANTIA TOTAL DE 30 DIAS
             </h3>
             
             <p className="text-muted-foreground text-sm md:text-base mb-4 leading-relaxed">
