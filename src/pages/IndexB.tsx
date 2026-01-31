@@ -11,6 +11,7 @@ const ChoiceSectionB = lazy(() => import("@/components/versao-b/ChoiceSectionB")
 const SolutionSectionB = lazy(() => import("@/components/versao-b/SolutionSectionB"));
 const BenefitsSectionB = lazy(() => import("@/components/versao-b/BenefitsSectionB"));
 const ComparisonSectionB = lazy(() => import("@/components/versao-b/ComparisonSectionB"));
+const ResultsCarouselB = lazy(() => import("@/components/versao-b/ResultsCarouselB"));
 const EducationSectionB = lazy(() => import("@/components/versao-b/EducationSectionB"));
 const GuaranteeSectionB = lazy(() => import("@/components/versao-b/GuaranteeSectionB"));
 const FinalCTASectionB = lazy(() => import("@/components/versao-b/FinalCTASectionB"));
@@ -67,7 +68,12 @@ const IndexB = () => {
           <ComparisonSectionB />
         </Suspense>
         
-        {/* 7. OFERTA - Kits de Preço */}
+        {/* 7. RESULTADOS - Carrossel de antes/depois */}
+        <Suspense fallback={<SectionLoader />}>
+          <ResultsCarouselB />
+        </Suspense>
+        
+        {/* 8. OFERTA - Kits de Preço */}
         <Suspense fallback={<SectionLoader />}>
           <OfferSection />
         </Suspense>
