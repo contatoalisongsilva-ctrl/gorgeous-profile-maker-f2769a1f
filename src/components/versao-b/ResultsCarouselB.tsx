@@ -1,41 +1,29 @@
 import { useState, useEffect, useRef } from "react";
-import reviewBeforeAfter1 from "@/assets/review-before-after-1.png";
-import reviewBeforeAfter2 from "@/assets/review-before-after-2.png";
-import reviewBeforeAfter3 from "@/assets/review-before-after-3.png";
-import reviewBeforeAfter4 from "@/assets/review-before-after-4.png";
+import skinBefore1 from "@/assets/skin-result-before-1.jpg";
+import skinAfter1 from "@/assets/skin-result-after-1.jpg";
+import skinBefore2 from "@/assets/skin-result-before-2.jpg";
+import skinAfter2 from "@/assets/skin-result-after-2.jpg";
 
 const results = [
   {
     id: 1,
-    tag: "Pele Madura +45",
-    description: "Resultados em pele com sinais avançados de envelhecimento",
-    image: reviewBeforeAfter1,
-    weeksAfter: "4 semanas",
+    tag: "Pele Madura +50",
+    description: "Rugas profundas ao redor dos olhos",
+    beforeImage: skinBefore1,
+    afterImage: skinAfter1,
+    beforeLabel: "Semana 1",
+    afterLabel: "Semana 4",
     benefit: "Rugas suavizadas",
   },
   {
     id: 2,
-    tag: "Pele +35",
-    description: "Resultados em pele com primeiros sinais de envelhecimento",
-    image: reviewBeforeAfter2,
-    weeksAfter: "8 semanas",
+    tag: "Pele +45",
+    description: "Linhas de expressão e flacidez",
+    beforeImage: skinBefore2,
+    afterImage: skinAfter2,
+    beforeLabel: "Semana 2",
+    afterLabel: "Semana 8",
     benefit: "Pele rejuvenescida",
-  },
-  {
-    id: 3,
-    tag: "Pele +40",
-    description: "Resultados em pele com linhas de expressão",
-    image: reviewBeforeAfter3,
-    weeksAfter: "6 semanas",
-    benefit: "Mais firmeza",
-  },
-  {
-    id: 4,
-    tag: "Pele +50",
-    description: "Resultados em pele madura",
-    image: reviewBeforeAfter4,
-    weeksAfter: "8 semanas",
-    benefit: "Pele revitalizada",
   },
 ];
 
@@ -43,11 +31,11 @@ const ResultsCarouselB = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll every 3 seconds
+  // Auto-scroll every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % results.length);
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -100,23 +88,38 @@ const ResultsCarouselB = () => {
                     </p>
                   </div>
 
-                  {/* Before/After Image */}
-                  <div className="rounded-xl overflow-hidden">
-                    <img
-                      src={result.image}
-                      alt={`Resultado ${result.tag}`}
-                      className="w-full h-auto"
-                    />
-                  </div>
+                  {/* Before/After Images Side by Side */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* Before */}
+                    <div className="relative">
+                      <div className="rounded-xl overflow-hidden aspect-[3/4]">
+                        <img
+                          src={result.beforeImage}
+                          alt="Antes"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gray-800/80 text-white text-center py-2 rounded-b-xl">
+                        <p className="text-[10px] uppercase tracking-wide">Antes</p>
+                        <p className="text-xs font-semibold">{result.beforeLabel}</p>
+                      </div>
+                    </div>
 
-                  {/* Result info */}
-                  <div className="mt-3 text-center">
-                    <p className="text-primary font-bold text-lg">
-                      {result.weeksAfter}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {result.benefit}
-                    </p>
+                    {/* After */}
+                    <div className="relative">
+                      <div className="rounded-xl overflow-hidden aspect-[3/4] ring-2 ring-primary">
+                        <img
+                          src={result.afterImage}
+                          alt="Depois"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-primary text-white text-center py-2 rounded-b-xl">
+                        <p className="text-[10px] uppercase tracking-wide">Depois</p>
+                        <p className="text-xs font-semibold">{result.afterLabel}</p>
+                        <p className="text-[10px]">{result.benefit}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
