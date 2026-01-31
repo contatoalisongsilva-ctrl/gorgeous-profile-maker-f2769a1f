@@ -99,8 +99,7 @@ const ResultsCarouselB = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/90 text-white text-center py-2 rounded-b-xl">
-                        <p className="text-[10px] uppercase tracking-wide text-white">Antes</p>
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/90 text-center py-2 rounded-b-xl">
                         <p className="text-xs font-semibold text-white">{result.beforeLabel}</p>
                       </div>
                     </div>
@@ -115,7 +114,6 @@ const ResultsCarouselB = () => {
                         />
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 bg-primary text-center py-2 rounded-b-xl">
-                        <p className="text-[10px] uppercase tracking-wide text-white">Depois</p>
                         <p className="text-xs font-semibold text-white">{result.afterLabel}</p>
                         <p className="text-[10px] text-white">{result.benefit}</p>
                       </div>
