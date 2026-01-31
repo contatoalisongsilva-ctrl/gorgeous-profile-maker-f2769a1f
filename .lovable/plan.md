@@ -1,94 +1,53 @@
 
-# Plano: Trocar Kit Product para a Versão B
+# Plano: Trocar Kit Product para a Versão A (página principal)
 
 ## Objetivo
-Fazer com que a página `/versao-b` use o produto **Kit Colágeno Verisol® - B1** (ID: 7415497916487) em vez do produto padrão, mantendo a página principal (`/`) com o produto atual.
+Atualizar a página principal (`/`) para usar o produto **Kit Colágeno Verisol® - A1** (ID: 7415497883719), substituindo o produto padrão atual. Isso completa o setup de A/B testing com produtos separados.
 
-## Dados do Novo Produto (já validado na Shopify)
+## Dados do Produto A1 (validado na Shopify)
 
 | Variante | Variant ID | Preço |
 |----------|------------|-------|
-| 1 unidade | 42450247352391 | R$ 117,70 |
-| 3 unidades | 42450247385159 | R$ 267,70 |
-| 6 unidades | 42450247417927 | R$ 477,70 |
+| 1 unidade | 42450247254087 | R$ 117,70 |
+| 3 unidades | 42450247286855 | R$ 267,70 |
+| 6 unidades | 42450247319623 | R$ 477,70 |
 
-- **Product ID:** 7415497916487
-- **Handle:** kit-colageno-verisol®-b1-lovable-rugas
-
-## Estratégia de Implementação
-
-A melhor abordagem é criar uma configuração separada para o produto B1 e passar via props, evitando duplicação de código e mantendo a manutenibilidade.
+- **Product ID:** 7415497883719
+- **Handle:** kit-colageno-verisol-a1-lovable-rugas
+- **Base Handle:** colageno-verisol-a1
 
 ## Mudanças Necessárias
 
-### 1. Criar configuração do Kit B1 em `src/lib/shopify.ts`
-Adicionar um novo objeto `KIT_PRODUCT_B1` com os IDs corretos:
+### 1. Atualizar `KIT_PRODUCT` em `src/lib/shopify.ts`
+Substituir os IDs do produto padrão pelos IDs do produto A1:
+
 ```typescript
-export const KIT_PRODUCT_B1 = {
-  productId: "gid://shopify/Product/7415497916487",
-  handle: "kit-colageno-verisol-b1-lovable-rugas",
-  baseHandle: "colageno-verisol-b1",
+export const KIT_PRODUCT = {
+  productId: "gid://shopify/Product/7415497883719",
+  handle: "kit-colageno-verisol-a1-lovable-rugas",
+  baseHandle: "colageno-verisol-a1",
   variants: {
-    1: { variantId: "gid://shopify/ProductVariant/42450247352391", priceCents: 11770 },
-    3: { variantId: "gid://shopify/ProductVariant/42450247385159", priceCents: 26770 },
-    6: { variantId: "gid://shopify/ProductVariant/42450247417927", priceCents: 47770 }
+    1: { variantId: "gid://shopify/ProductVariant/42450247254087", priceCents: 11770 },
+    3: { variantId: "gid://shopify/ProductVariant/42450247286855", priceCents: 26770 },
+    6: { variantId: "gid://shopify/ProductVariant/42450247319623", priceCents: 47770 }
   }
 };
 ```
 
-### 2. Modificar função `createShopifyCheckout` em `src/lib/shopify.ts`
-Adicionar parâmetro opcional para receber o kit product:
-```typescript
-export async function createShopifyCheckout(
-  flavorQuantities: FlavorQuantities,
-  kitQuantity: number,
-  kitProduct = KIT_PRODUCT  // valor padrão mantém compatibilidade
-): Promise<string | null>
-```
-
-### 3. Modificar função `buildKitAttributes` em `src/lib/shopify.ts`
-Adicionar parâmetro para receber o kit product:
-```typescript
-function buildKitAttributes(
-  flavorQuantities: FlavorQuantities, 
-  kitQuantity: number,
-  kitProduct = KIT_PRODUCT
-): CartAttribute[]
-```
-
-### 4. Atualizar `OfferSection` para aceitar props opcionais
-Adicionar prop `kitProduct` com valor padrão:
-```typescript
-interface OfferSectionProps {
-  kitProduct?: typeof KIT_PRODUCT;
-}
-
-const OfferSection = ({ kitProduct = KIT_PRODUCT }: OfferSectionProps) => {
-  // ... passar kitProduct para createShopifyCheckout
-}
-```
-
-### 5. Atualizar `IndexB.tsx` para passar o produto B1
-```typescript
-import { KIT_PRODUCT_B1 } from "@/lib/shopify";
-// ...
-<OfferSection kitProduct={KIT_PRODUCT_B1} />
-```
-
-## Arquivos a Modificar
-1. `src/lib/shopify.ts` - Adicionar KIT_PRODUCT_B1 e modificar funções
-2. `src/components/OfferSection.tsx` - Aceitar kitProduct via props
-3. `src/pages/IndexB.tsx` - Passar KIT_PRODUCT_B1 para OfferSection
+## Arquivo a Modificar
+1. `src/lib/shopify.ts` - Atualizar `KIT_PRODUCT` com os novos IDs
 
 ## Resultado Esperado
-- Página `/` continuará usando o produto original (7376358539335)
-- Página `/versao-b` usará o produto B1 (7415497916487)
-- Vendas na versão B serão rastreadas separadamente no painel Shopify
 
-## Detalhes Técnicos
+Após a implementação:
+- **Página `/`** → Produto A1 (7415497883719)
+- **Página `/versao-b`** → Produto B1 (7415497916487)
 
-As funções internas que usam `KIT_PRODUCT` diretamente serão atualizadas para receber o parâmetro:
-- `buildKitAttributes()` → recebe `kitProduct` 
-- `createShopifyCheckout()` → recebe `kitProduct` e passa para `buildKitAttributes()`
+Isso permite rastrear vendas de cada versão separadamente no painel Shopify, facilitando a análise do A/B test.
 
-Isso garante que os metadados do checkout (`_kit_base_handle`, `_kit_product_handle`, variant IDs) sejam corretos para cada versão.
+## Resumo dos Produtos
+
+| Página | Produto | Product ID | Rastreamento |
+|--------|---------|------------|--------------|
+| `/` (Versão A) | Kit Colágeno Verisol® - A1 | 7415497883719 | Separado |
+| `/versao-b` | Kit Colágeno Verisol® - B1 | 7415497916487 | Separado |
