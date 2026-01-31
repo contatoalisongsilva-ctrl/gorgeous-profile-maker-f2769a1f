@@ -116,11 +116,11 @@ const BenefitsSectionB = () => {
           <div className="mt-6 bg-primary/20 rounded-xl p-4 text-center border border-primary/30">
             <div className="flex items-center justify-center gap-1.5 mb-1">
               <Lightbulb className="w-4 h-4 text-primary" />
-              <span className="font-semibold text-primary text-sm">Dica Importante</span>
+              <span className="font-semibold text-primary text-sm">Por que o uso contínuo?</span>
             </div>
             <p className="text-muted-foreground text-xs leading-relaxed">
-              Para melhores resultados, mantenha o uso contínuo por pelo menos <strong className="text-foreground">90 dias</strong>. 
-              É o tempo que seu corpo precisa para regenerar o colágeno.
+              A partir dos 25 anos, seu corpo produz <strong className="text-foreground">cada vez menos colágeno</strong>. 
+              Por isso, a suplementação não é temporária — é uma reposição essencial para manter sua pele firme e jovem ao longo do tempo.
             </p>
           </div>
         </div>
