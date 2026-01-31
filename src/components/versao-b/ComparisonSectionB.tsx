@@ -8,16 +8,19 @@ const ingredients = [
     logo: logoVerisol,
     name: "Verisol®",
     description: "Colágeno hidrolisado patenteado que estimula a produção natural de colágeno na derme, onde as rugas nascem.",
+    logoClass: "max-w-full max-h-full object-contain",
   },
   {
     logo: logoHaplex,
     name: "Haplex® Plus",
     description: "Ácido hialurônico de alta absorção que hidrata profundamente e preenche a pele de dentro para fora.",
+    logoClass: "w-full h-full object-contain scale-125",
   },
   {
     logo: logoVitaminC,
     name: "Vitamina C",
     description: "Potente antioxidante que potencializa a síntese de colágeno e protege contra o envelhecimento precoce.",
+    logoClass: "w-full h-full object-cover scale-150",
   },
 ];
 
@@ -60,11 +63,11 @@ const ComparisonSectionB = () => {
                   key={index}
                   className="bg-secondary/30 rounded-xl p-4 flex items-start gap-4"
                 >
-                  <div className="w-16 h-12 flex-shrink-0 flex items-center justify-center">
+                  <div className="w-14 h-14 flex-shrink-0 flex items-center justify-center overflow-hidden rounded-lg">
                     <img 
                       src={item.logo} 
                       alt={item.name}
-                      className="max-w-full max-h-full object-contain"
+                      className={item.logoClass}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
