@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Loader2, Truck, Shield, Award, ThumbsUp } from "lucide-react";
+import { Loader2, Truck, Shield, Award, ThumbsUp, Car } from "lucide-react";
 import { useSelectedKit } from "@/contexts/SelectedKitContext";
 import KitSelector from "./KitSelector";
 import FlavorSelector from "./FlavorSelector";
@@ -11,6 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "./ui/drawer";
+import CarPromoPopup from "./CarPromoPopup";
 
 const OfferSection = () => {
   const { setSelectedQuantity } = useSelectedKit();
@@ -18,6 +19,7 @@ const OfferSection = () => {
   const [flavors, setFlavors] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isCarPromoOpen, setIsCarPromoOpen] = useState(false);
 
   const maxFlavors = selectedKit === "1x" ? 1 : selectedKit === "3x" ? 3 : 6;
   const totalFlavors = Object.values(flavors).reduce((a, b) => a + b, 0);
@@ -115,9 +117,39 @@ const OfferSection = () => {
         </div>
 
         {/* Kit Selector */}
-        <div className="max-w-3xl mx-auto mb-10">
+        <div className="max-w-3xl mx-auto mb-6">
           <KitSelector selectedKit={selectedKit} onKitChange={handleKitChange} onBuyClick={handleBuyClick} />
         </div>
+
+        {/* Car Promo Banner - Only shows when 6x is selected */}
+        {selectedKit === "6x" && (
+          <div className="max-w-3xl mx-auto mb-10">
+            <button
+              onClick={() => setIsCarPromoOpen(true)}
+              className="w-full bg-gradient-to-r from-primary to-primary/80 rounded-xl p-4 flex items-center justify-between gap-4 hover:shadow-lg transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                  <Car className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <p className="text-white font-bold text-sm">
+                    🎉 Você está concorrendo a um carro 0km!
+                  </p>
+                  <p className="text-white/80 text-xs">
+                    Kit 6 potes = 1 número da sorte para o Volkswagen Tera
+                  </p>
+                </div>
+              </div>
+              <div className="text-white/80 text-xs underline group-hover:text-white transition-colors flex-shrink-0">
+                Saiba mais →
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* Car Promo Popup */}
+        <CarPromoPopup open={isCarPromoOpen} onOpenChange={setIsCarPromoOpen} />
 
         {/* Flavor Selection Drawer */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
