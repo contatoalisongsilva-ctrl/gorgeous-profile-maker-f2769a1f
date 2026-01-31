@@ -1,10 +1,11 @@
-import { Car, Gift } from "lucide-react";
+import { Gift, X } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
 } from "./ui/drawer";
+import { Button } from "./ui/button";
 import promoCarHero from "@/assets/promo-car-hero.png";
 
 interface CarPromoPopupProps {
@@ -39,13 +40,22 @@ const CarPromoPopup = ({ open, onOpenChange }: CarPromoPopupProps) => {
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="max-h-[85vh] bg-white">
+        {/* Close button */}
+        <button
+          onClick={() => onOpenChange(false)}
+          className="absolute right-4 top-4 z-10 p-1 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+          aria-label="Fechar"
+        >
+          <X className="w-5 h-5 text-muted-foreground" />
+        </button>
+
         <DrawerHeader className="p-4 pb-2">
           <DrawerTitle className="text-foreground text-center text-lg font-bold">
             🚗 Sua Rotina Vale um Carro!
           </DrawerTitle>
         </DrawerHeader>
 
-        <div className="px-4 pb-6 overflow-y-auto">
+        <div className="px-4 pb-4 overflow-y-auto">
           {/* Car Image */}
           <div className="mb-4">
             <img
@@ -104,6 +114,14 @@ const CarPromoPopup = ({ open, onOpenChange }: CarPromoPopupProps) => {
               Válido para os Kits 3 e 6 Potes cadastrados na promoção.
             </p>
           </div>
+
+          {/* Back to buy button */}
+          <Button
+            onClick={() => onOpenChange(false)}
+            className="w-full py-5 text-sm font-semibold"
+          >
+            ← Voltar para comprar
+          </Button>
         </div>
       </DrawerContent>
     </Drawer>
