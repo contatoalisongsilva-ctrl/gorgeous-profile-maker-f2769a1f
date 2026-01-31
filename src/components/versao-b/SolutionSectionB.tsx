@@ -47,9 +47,9 @@ const SolutionSectionB = () => {
             </p>
           </div>
 
-          {/* Product Image - Full Width */}
-          <div className="mb-8 -mx-4 md:mx-0">
-            <div className="overflow-hidden md:rounded-2xl shadow-lg">
+          {/* Product Image */}
+          <div className="mb-8">
+            <div className="overflow-hidden rounded-2xl shadow-lg max-w-md mx-auto">
               <img 
                 src={productWoman} 
                 alt="Mulher usando Colágeno Verisol Renova Be"
