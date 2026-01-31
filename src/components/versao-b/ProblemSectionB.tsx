@@ -1,13 +1,29 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 
+// Placeholder images - you can replace these with actual problem images
+import problemRugasTesta from "@/assets/problem-rugas-testa.jpg";
+import problemFlacidez from "@/assets/problem-flacidez.jpg";
+import problemPeGalinha from "@/assets/problem-pe-galinha.jpg";
+import problemAspectoCansado from "@/assets/problem-aspecto-cansado.jpg";
+
 const problems = [
-  "Rugas ao redor dos olhos que dependem a cada dia?",
-  "Linhas na boca que parecem mais marcadas nas fotos?",
-  "Rosto com aspecto de \"cansado\" mesmo depois de dormir bem?",
-  "Pescoço com perda de firmeza e flacidez?",
-  "Sensação de que a pele perdeu a \"sustentação\" que tinha?",
-  "Maquiagem que já não disfarça mais como antigamente?",
+  {
+    text: "Rugas ao redor dos olhos que dependem a cada dia?",
+    image: problemPeGalinha,
+  },
+  {
+    text: "Linhas na boca que parecem mais marcadas nas fotos?",
+    image: problemRugasTesta,
+  },
+  {
+    text: "Rosto com aspecto de \"cansado\" mesmo depois de dormir bem?",
+    image: problemAspectoCansado,
+  },
+  {
+    text: "Pescoço com perda de firmeza e flacidez?",
+    image: problemFlacidez,
+  },
 ];
 
 const ProblemSectionB = () => {
@@ -39,21 +55,26 @@ const ProblemSectionB = () => {
               <button
                 key={index}
                 onClick={() => toggleItem(index)}
-                className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left ${
+                className={`w-full flex items-center gap-4 p-3 rounded-xl border transition-all text-left ${
                   checkedItems.includes(index)
                     ? "border-primary bg-primary/5"
                     : "border-border bg-white"
                 }`}
               >
-                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all ${
-                  checkedItems.includes(index)
-                    ? "bg-primary"
-                    : "bg-muted-foreground/40"
-                }`} />
-                <span className={`text-sm md:text-base leading-relaxed ${
+                {/* Image box */}
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
+                  <img 
+                    src={problem.image} 
+                    alt="" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                {/* Text */}
+                <span className={`text-sm md:text-base leading-relaxed flex-1 ${
                   checkedItems.includes(index) ? "text-foreground font-medium" : "text-muted-foreground"
                 }`}>
-                  {problem}
+                  {problem.text}
                 </span>
               </button>
             ))}
