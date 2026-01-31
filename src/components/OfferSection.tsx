@@ -111,9 +111,6 @@ const OfferSection = () => {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 tracking-tight">
             Selecione seu Kit
           </h2>
-          <p className="text-sm md:text-base text-muted-foreground">
-            Quanto mais você compra, mais você economiza
-          </p>
         </div>
 
         {/* Kit Selector */}

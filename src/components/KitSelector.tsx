@@ -53,7 +53,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
   return (
     <div className="space-y-4">
       <p className="text-center text-sm text-muted-foreground font-medium">
-        Quanto mais levar, maiores os descontos e brindes!
+        🚗 Comprando 3 ou 6 potes você concorre a um carro 0km!
       </p>
 
       {/* Top Row: 1 unit and 3 units side by side */}
