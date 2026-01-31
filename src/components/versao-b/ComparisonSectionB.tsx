@@ -14,13 +14,13 @@ const ingredients = [
     logo: logoHaplex,
     name: "Haplex® Plus",
     description: "Ácido hialurônico de alta absorção que hidrata profundamente e preenche a pele de dentro para fora.",
-    logoClass: "w-full h-full object-contain scale-125",
+    logoClass: "w-full h-full object-contain scale-110",
   },
   {
     logo: logoVitaminC,
     name: "Vitamina C",
     description: "Potente antioxidante que potencializa a síntese de colágeno e protege contra o envelhecimento precoce.",
-    logoClass: "w-full h-full object-cover scale-150",
+    logoClass: "w-full h-full object-contain scale-110",
   },
 ];
 
