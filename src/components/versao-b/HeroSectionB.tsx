@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import heroBannerDesktop from "@/assets/hero-banner-desktop.png";
-import heroBannerMobile from "@/assets/hero-banner-mobile-new.jpg";
 
 const HeroSectionB = () => {
   const scrollToOffer = () => {
@@ -12,39 +10,21 @@ const HeroSectionB = () => {
   };
 
   return (
-    <section className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col">
-      {/* Hero Banner - Full width */}
-      <div className="relative w-full flex-1">
-        {/* Desktop Banner */}
-        <img
-          src={heroBannerDesktop}
-          alt="Colágeno Verisol Renova Be - Combate às Rugas"
-          className="hidden md:block w-full h-full object-cover object-top"
-          fetchPriority="high"
-        />
-        {/* Mobile Banner */}
-        <img
-          src={heroBannerMobile}
-          alt="Colágeno Verisol Renova Be - Combate às Rugas"
-          className="md:hidden w-full h-full object-cover object-center"
-          fetchPriority="high"
-        />
-        
-        {/* Gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      </div>
-
-      {/* Emotional Hook - Overlaid on bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
-        <div className="container mx-auto max-w-3xl">
-          <p className="text-sm md:text-base opacity-90 mb-4 leading-relaxed">
+    <section className="py-12 md:py-20 bg-gradient-to-b from-secondary/50 to-white">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-base md:text-lg text-foreground mb-4 leading-relaxed">
             Você se olha no espelho e já não reconhece mais o rosto que conhecia.
           </p>
-          <p className="text-sm md:text-base opacity-80 mb-4 leading-relaxed">
+          <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed">
             As rugas ao redor dos olhos que parecem ter aparecido do nada. As linhas na boca que a maquiagem já não cobre mais. A sensação de que seu rosto perdeu a "estrutura" que tinha antes…
           </p>
-          <p className="text-sm md:text-base opacity-90 mb-6 leading-relaxed font-medium">
-            Se você tem mais de 35 anos e sente que as rugas estão ganhando terreno mais rápido do que deviam — <span className="text-primary">isso não é normal</span>. E você não precisa aceitar isso.
+          <p className="text-sm md:text-base text-foreground mb-8 leading-relaxed font-medium">
+            Se você tem mais de 35 anos e sente que as rugas estão ganhando terreno mais rápido do que deviam — <span className="text-primary font-semibold">isso não é normal</span>. E você não precisa aceitar isso.
+          </p>
+          
+          <p className="text-primary font-semibold text-sm md:text-base mb-6">
+            Existe uma solução que atua por dentro, no lugar onde as rugas realmente nascem.
           </p>
           
           <Button
