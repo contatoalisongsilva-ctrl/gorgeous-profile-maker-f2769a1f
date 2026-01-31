@@ -1,30 +1,23 @@
-import { Check, X } from "lucide-react";
+import collagenGif from "@/assets/collagen-absorption.gif";
+import logoVerisol from "@/assets/logo-verisol.png";
+import logoHaplex from "@/assets/logo-haplex-plus.webp";
+import { Sparkles } from "lucide-react";
 
-const comparisonData = [
+const ingredients = [
   {
-    aspect: "Ação",
-    cream: "Só hidratam a superfície",
-    verisol: "Estimula colágeno próprio por dentro",
+    logo: logoVerisol,
+    name: "Verisol®",
+    description: "Colágeno hidrolisado patenteado que estimula a produção natural de colágeno na derme, onde as rugas nascem.",
   },
   {
-    aspect: "Efeito nas rugas",
-    cream: "Não reduz",
-    verisol: "Preenche e reduz rugas",
+    logo: logoHaplex,
+    name: "Haplex® Plus",
+    description: "Ácido hialurônico de alta absorção que hidrata profundamente e preenche a pele de dentro para fora.",
   },
   {
-    aspect: "Onde age",
-    cream: "Na camada externa",
-    verisol: "Vai até a derme (onde as rugas nascem)",
-  },
-  {
-    aspect: "Resultado",
-    cream: "Temporário",
-    verisol: "Progressivo e duradouro",
-  },
-  {
-    aspect: "Praticidade",
-    cream: "Aplicação 2x/dia na pele",
-    verisol: "Uma vez ao dia, toma como suco",
+    icon: Sparkles,
+    name: "Vitamina C",
+    description: "Potente antioxidante que potencializa a síntese de colágeno e protege contra o envelhecimento precoce.",
   },
 ];
 
@@ -33,80 +26,64 @@ const ComparisonSectionB = () => {
     <section className="py-12 md:py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
+          {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-              Por que o Colágeno Verisol® é diferente?
+            <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-semibold uppercase tracking-wider mb-3">
+              Fórmula Exclusiva
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              Tripla ação para rejuvenescer sua pele
             </h2>
+            <p className="text-muted-foreground text-sm">
+              Ingredientes premium que trabalham juntos para resultados visíveis
+            </p>
           </div>
 
-          {/* Mobile: Cards */}
-          <div className="md:hidden space-y-4">
-            {comparisonData.map((item, index) => (
-              <div key={index} className="bg-secondary/30 rounded-xl p-4">
-                <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-wide">
-                  {item.aspect}
-                </h4>
-                <div className="space-y-2">
-                  <div className="flex items-start gap-2 text-sm">
-                    <X className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="text-muted-foreground text-xs">Cremes:</span>
-                      <p className="text-muted-foreground">{item.cream}</p>
+          {/* GIF + Ingredients */}
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            {/* GIF */}
+            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 p-4">
+              <img 
+                src={collagenGif} 
+                alt="Absorção do colágeno na pele"
+                className="w-full h-auto rounded-xl"
+              />
+              <p className="text-center text-xs text-muted-foreground mt-3">
+                Visualização da absorção do colágeno nas camadas da pele
+              </p>
+            </div>
+
+            {/* Ingredients List */}
+            <div className="space-y-4">
+              {ingredients.map((item, index) => (
+                <div 
+                  key={index}
+                  className="bg-secondary/30 rounded-xl p-4 flex items-start gap-4"
+                >
+                  {item.logo ? (
+                    <div className="w-16 h-12 flex-shrink-0 flex items-center justify-center">
+                      <img 
+                        src={item.logo} 
+                        alt={item.name}
+                        className="max-w-full max-h-full object-contain"
+                      />
                     </div>
-                  </div>
-                  <div className="flex items-start gap-2 text-sm">
-                    <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="text-primary text-xs font-medium">Verisol®:</span>
-                      <p className="text-foreground font-medium">{item.verisol}</p>
+                  ) : item.icon ? (
+                    <div className="w-12 h-12 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+                      <item.icon className="w-6 h-6 text-primary" />
                     </div>
+                  ) : null}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-foreground text-sm mb-1">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Desktop: Table */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-secondary/50">
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">
-                    Aspecto
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-muted-foreground">
-                    Cremes e Hidratantes
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-primary">
-                    Colágeno Verisol® Renova Be
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonData.map((item, index) => (
-                  <tr 
-                    key={index}
-                    className={index % 2 === 0 ? "bg-white" : "bg-secondary/20"}
-                  >
-                    <td className="px-4 py-3 text-sm font-medium text-foreground">
-                      {item.aspect}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <X className="w-4 h-4 text-red-400" />
-                        {item.cream}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-foreground font-medium">
-                      <div className="flex items-center gap-2">
-                        <Check className="w-4 h-4 text-primary" />
-                        {item.verisol}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </div>
           </div>
         </div>
       </div>
