@@ -99,9 +99,9 @@ const ResultsCarouselB = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="absolute bottom-0 left-0 right-0 bg-gray-800/80 text-white text-center py-2 rounded-b-xl">
-                        <p className="text-[10px] uppercase tracking-wide">Antes</p>
-                        <p className="text-xs font-semibold">{result.beforeLabel}</p>
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/90 text-white text-center py-2 rounded-b-xl">
+                        <p className="text-[10px] uppercase tracking-wide text-white">Antes</p>
+                        <p className="text-xs font-semibold text-white">{result.beforeLabel}</p>
                       </div>
                     </div>
 
