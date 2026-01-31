@@ -1,53 +1,74 @@
 
-# Plano: Trocar Kit Product para a Versão A (página principal)
+# Plano: Split de Tráfego A/B 50/50
 
 ## Objetivo
-Atualizar a página principal (`/`) para usar o produto **Kit Colágeno Verisol® - A1** (ID: 7415497883719), substituindo o produto padrão atual. Isso completa o setup de A/B testing com produtos separados.
+Dividir aleatoriamente o tráfego que chega em `ab1colageno.renovabe.com.br` em 50% para a página A (`/`) e 50% para a página B (`/versao-b`).
 
-## Dados do Produto A1 (validado na Shopify)
+## Como Funcionará
 
-| Variante | Variant ID | Preço |
-|----------|------------|-------|
-| 1 unidade | 42450247254087 | R$ 117,70 |
-| 3 unidades | 42450247286855 | R$ 267,70 |
-| 6 unidades | 42450247319623 | R$ 477,70 |
-
-- **Product ID:** 7415497883719
-- **Handle:** kit-colageno-verisol-a1-lovable-rugas
-- **Base Handle:** colageno-verisol-a1
+```
+Usuário acessa ab1colageno.renovabe.com.br
+              ↓
+    Tem cookie "ab_variant"?
+              ↓
+    ┌─────────┴─────────┐
+   SIM                 NÃO
+    ↓                   ↓
+  Usa o valor      Sorteia 50/50
+  já salvo         Salva no cookie
+    ↓                   ↓
+    └─────────┬─────────┘
+              ↓
+      variant === "B"?
+              ↓
+    ┌─────────┴─────────┐
+   SIM                 NÃO
+    ↓                   ↓
+ Redireciona       Permanece na
+ para /versao-b     página /
+```
 
 ## Mudanças Necessárias
 
-### 1. Atualizar `KIT_PRODUCT` em `src/lib/shopify.ts`
-Substituir os IDs do produto padrão pelos IDs do produto A1:
+### Arquivo: `index.html`
 
-```typescript
-export const KIT_PRODUCT = {
-  productId: "gid://shopify/Product/7415497883719",
-  handle: "kit-colageno-verisol-a1-lovable-rugas",
-  baseHandle: "colageno-verisol-a1",
-  variants: {
-    1: { variantId: "gid://shopify/ProductVariant/42450247254087", priceCents: 11770 },
-    3: { variantId: "gid://shopify/ProductVariant/42450247286855", priceCents: 26770 },
-    6: { variantId: "gid://shopify/ProductVariant/42450247319623", priceCents: 47770 }
-  }
-};
-```
+Adicionar dois scripts no `<head>` (antes do GTM para garantir execução rápida):
+
+**1. Script de A/B Split** - Executa antes de qualquer conteúdo carregar:
+- Verifica se existe cookie `ab_variant`
+- Se não existir, sorteia 50/50 e salva no cookie (30 dias)
+- Se variante = B e usuário está em `/`, redireciona para `/versao-b`
+- Suporta parâmetro `?force_variant=A` ou `?force_variant=B` para testes
+
+**2. Script de Tracking** - Expõe variante no dataLayer para GTM:
+- Disponibiliza `ab_variant` (A ou B) para análise
+- Disponibiliza `ab_test_name` para identificar o teste
+
+## Comportamento Esperado
+
+| Cenário | Resultado |
+|---------|-----------|
+| Primeira visita em `/` | 50% chance de ficar, 50% vai para `/versao-b` |
+| Retorno com cookie A | Sempre vê página A (`/`) |
+| Retorno com cookie B | Sempre vê página B (`/versao-b`) |
+| Acesso direto a `/versao-b` | Permanece na versão B (sem redirect) |
+| URL com `?force_variant=B` | Força versão B (útil para testes) |
+| Limpar cookies | Nova escolha 50/50 |
+
+## Detalhes Técnicos
+
+- **Script síncrono no `<head>`**: Executa ANTES do React carregar, evitando flash visual
+- **`window.location.replace()`**: Não adiciona entrada no histórico do navegador
+- **Cookie com `path=/`**: Funciona em todas as rotas do site
+- **Cookie de 30 dias**: Tempo suficiente para duração do teste A/B
+- **Só executa em `/`**: Acessos diretos a `/versao-b` não são afetados
+
+## Integração com Analytics
+
+A variante será enviada para o GTM via dataLayer, permitindo:
+- Segmentar relatórios por versão A/B
+- Comparar conversões entre versões
+- Criar eventos específicos por variante
 
 ## Arquivo a Modificar
-1. `src/lib/shopify.ts` - Atualizar `KIT_PRODUCT` com os novos IDs
-
-## Resultado Esperado
-
-Após a implementação:
-- **Página `/`** → Produto A1 (7415497883719)
-- **Página `/versao-b`** → Produto B1 (7415497916487)
-
-Isso permite rastrear vendas de cada versão separadamente no painel Shopify, facilitando a análise do A/B test.
-
-## Resumo dos Produtos
-
-| Página | Produto | Product ID | Rastreamento |
-|--------|---------|------------|--------------|
-| `/` (Versão A) | Kit Colágeno Verisol® - A1 | 7415497883719 | Separado |
-| `/versao-b` | Kit Colágeno Verisol® - B1 | 7415497916487 | Separado |
+1. `index.html` - Adicionar scripts de split e tracking no `<head>`
