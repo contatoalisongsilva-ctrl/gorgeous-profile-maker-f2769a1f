@@ -1,20 +1,21 @@
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Droplets, Sun, Star } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
-const timeline = [
+const timeline: { period: string; description: string; Icon: LucideIcon; results?: string[] }[] = [
   {
     period: "Primeiras 2 semanas",
     description: "Pele mais hidratada, linhas finas menos visíveis, primeiro sinal de preenchimento.",
-    icon: "💧",
+    Icon: Droplets,
   },
   {
     period: "De 4 a 6 semanas",
     description: "Redução visível das rugas ao redor dos olhos e boca. Rosto com aspecto mais descansado e luminoso.",
-    icon: "✨",
+    Icon: Sun,
   },
   {
     period: "De 60 a 90 dias",
     description: "Resultado máximo com uso contínuo.",
-    icon: "🌟",
+    Icon: Star,
     results: [
       "Rugas significativamente reduzidas",
       "Rosto com mais volume e sustentação",
@@ -51,8 +52,8 @@ const BenefitsSectionB = () => {
                   className="relative bg-white rounded-xl p-5 border border-border shadow-sm"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-2xl">
-                      {item.icon}
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <item.Icon className="w-6 h-6 text-primary" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-bold text-foreground mb-2">

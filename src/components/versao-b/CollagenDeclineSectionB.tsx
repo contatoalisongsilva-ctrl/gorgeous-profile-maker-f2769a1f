@@ -1,10 +1,11 @@
+import { Eye, Circle, Smile, User, AlertTriangle } from "lucide-react";
 import collagenChart from "@/assets/collagen-chart.jpg";
 
 const affectedAreas = [
-  { emoji: "👁️", text: "Ao redor dos olhos (pés de galinha)" },
-  { emoji: "👄", text: "Linhas de expressão na boca" },
-  { emoji: "😶", text: "Bigode chinês" },
-  { emoji: "🦢", text: "Pescoço e região do queixo" },
+  { Icon: Eye, text: "Ao redor dos olhos (pés de galinha)" },
+  { Icon: Circle, text: "Linhas de expressão na boca" },
+  { Icon: Smile, text: "Bigode chinês" },
+  { Icon: User, text: "Pescoço e região do queixo" },
 ];
 
 const CollagenDeclineSectionB = () => {
@@ -46,7 +47,9 @@ const CollagenDeclineSectionB = () => {
                 key={index}
                 className="flex items-center gap-3 bg-secondary/50 rounded-xl p-4"
               >
-                <span className="text-2xl">{area.emoji}</span>
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <area.Icon className="w-5 h-5 text-primary" />
+                </div>
                 <span className="text-sm text-foreground">{area.text}</span>
               </div>
             ))}
@@ -54,8 +57,11 @@ const CollagenDeclineSectionB = () => {
 
           {/* Warning Box */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
-            <p className="text-sm md:text-base text-amber-900 leading-relaxed">
-              ⚠️ E a parte mais difícil: <strong>a cada dia que passa, mais colágeno é perdido</strong>. Creme hidratante não repõe o que está faltando por dentro.
+            <p className="text-sm md:text-base text-amber-900 leading-relaxed flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <span>
+                E a parte mais difícil: <strong>a cada dia que passa, mais colágeno é perdido</strong>. Creme hidratante não repõe o que está faltando por dentro.
+              </span>
             </p>
           </div>
         </div>
