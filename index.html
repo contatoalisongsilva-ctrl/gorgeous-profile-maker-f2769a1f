@@ -3,9 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     
+    <!-- A/B Split Test - 50/50 Traffic -->
+    <script>
+      (function() {
+        // Só executa na página principal
+        if (window.location.pathname !== '/') return;
+        
+        // Verifica parâmetro force_variant para testes
+        var urlParams = new URLSearchParams(window.location.search);
+        var forceVariant = urlParams.get('force_variant');
+        
+        // Verifica se já tem variante definida no cookie
+        var match = document.cookie.match(/ab_variant=([AB])/);
+        var variant = match ? match[1] : null;
+        
+        // Se forçado via URL, usa esse valor
+        if (forceVariant === 'A' || forceVariant === 'B') {
+          variant = forceVariant;
+        }
+        
+        // Se não tem variante, sorteia 50/50
+        if (!variant) {
+          variant = Math.random() < 0.5 ? 'A' : 'B';
+        }
+        
+        // Salva no cookie (30 dias)
+        document.cookie = 'ab_variant=' + variant + '; path=/; max-age=' + (30*24*60*60);
+        
+        // Se variante B, redireciona
+        if (variant === 'B') {
+          window.location.replace('/versao-b' + window.location.search);
+        }
+      })();
+    </script>
+    
+    <!-- A/B Variant Tracking for GTM -->
+    <script>
+      (function() {
+        var match = document.cookie.match(/ab_variant=([AB])/);
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'ab_variant': match ? match[1] : 'A',
+          'ab_test_name': 'landing_page_rugas_v1'
+        });
+      })();
+    </script>
+
     <!-- WapStore mock to prevent GTM errors -->
     <script>window.WapStore = window.WapStore || {};</script>
-    
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
