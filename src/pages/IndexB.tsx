@@ -7,6 +7,7 @@ import HeroSectionB from "@/components/versao-b/HeroSectionB";
 // Lazy load - Below the fold (versão B components)
 const ProblemSectionB = lazy(() => import("@/components/versao-b/ProblemSectionB"));
 const CollagenDeclineSectionB = lazy(() => import("@/components/versao-b/CollagenDeclineSectionB"));
+const ChoiceSectionB = lazy(() => import("@/components/versao-b/ChoiceSectionB"));
 const SolutionSectionB = lazy(() => import("@/components/versao-b/SolutionSectionB"));
 const BenefitsSectionB = lazy(() => import("@/components/versao-b/BenefitsSectionB"));
 const ComparisonSectionB = lazy(() => import("@/components/versao-b/ComparisonSectionB"));
@@ -44,6 +45,11 @@ const IndexB = () => {
         {/* 3. DECLÍNIO DO COLÁGENO - Por que aos 35+ */}
         <Suspense fallback={<SectionLoader />}>
           <CollagenDeclineSectionB />
+        </Suspense>
+        
+        {/* 3.5. ESCOLHA - Duas opções para a mulher */}
+        <Suspense fallback={<SectionLoader />}>
+          <ChoiceSectionB />
         </Suspense>
         
         {/* 4. SOLUÇÃO - Verisol + Tripla Ação */}
