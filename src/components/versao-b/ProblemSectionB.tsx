@@ -91,11 +91,6 @@ const ProblemSectionB = () => {
             </div>
           )}
 
-          {!hasChecked && (
-            <p className="text-center text-muted-foreground text-sm">
-              Selecione os sinais que você percebe no seu dia a dia
-            </p>
-          )}
         </div>
       </div>
     </section>

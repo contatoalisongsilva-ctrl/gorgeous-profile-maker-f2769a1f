@@ -139,7 +139,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
                   e.stopPropagation();
                   onBuyClick(kit.id);
                 }}
-                className="w-full mt-3 bg-primary hover:bg-primary/90 text-white font-semibold text-sm py-2"
+                className="w-full mt-3 bg-green-500 hover:bg-green-600 text-white font-semibold text-sm py-2"
               >
                 Comprar
               </Button>
@@ -231,7 +231,7 @@ const KitSelector = ({ selectedKit, onKitChange, onBuyClick }: KitSelectorProps)
                       e.stopPropagation();
                       onBuyClick(kit.id);
                     }}
-                    className="w-full mt-3 bg-primary hover:bg-primary/90 text-white font-semibold text-sm py-2"
+                    className="w-full mt-3 bg-green-500 hover:bg-green-600 text-white font-semibold text-sm py-2"
                   >
                     Comprar
                   </Button>

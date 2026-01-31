@@ -79,12 +79,6 @@ const SolutionSectionB = () => {
             </ul>
           </div>
 
-          {/* Logos */}
-          <div className="flex items-center justify-center gap-6 mb-12 p-4 bg-white rounded-xl border border-border">
-            <img src={logoVerisol} alt="Verisol" className="h-10 object-contain" loading="lazy" />
-            <div className="w-px h-8 bg-border" />
-            <img src={logoHaplex} alt="Haplex Plus" className="h-10 object-contain" loading="lazy" />
-          </div>
 
           {/* Triple Action */}
           <div className="mb-8">
