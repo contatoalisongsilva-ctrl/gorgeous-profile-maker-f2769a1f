@@ -58,18 +58,18 @@ const timeline: {
 
 const BenefitsSectionB = () => {
   return (
-    <section className="py-12 md:py-16 bg-primary">
+    <section className="py-12 md:py-16 bg-primary/10">
       <div className="container mx-auto px-4">
         <div className="max-w-xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <span className="inline-block px-5 py-2 bg-white/20 text-white rounded-full text-xs font-semibold uppercase tracking-widest mb-4">
+            <span className="inline-block px-5 py-2 bg-primary/20 text-primary rounded-full text-xs font-semibold uppercase tracking-widest mb-4">
               O Que Esperar
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
               Cronograma de Resultados
             </h2>
-            <p className="text-white/80 text-sm md:text-base">
+            <p className="text-muted-foreground text-sm md:text-base">
               Cada corpo responde de forma única, mas milhares de clientes relatam melhorias significativas seguindo este cronograma.
             </p>
           </div>
@@ -77,7 +77,7 @@ const BenefitsSectionB = () => {
           {/* Timeline */}
           <div className="relative pl-16 md:pl-20">
             {/* Vertical line */}
-            <div className="absolute left-[22px] md:left-[26px] top-6 bottom-6 w-1 bg-white/30 rounded-full" />
+            <div className="absolute left-[22px] md:left-[26px] top-6 bottom-6 w-1 bg-primary/30 rounded-full" />
             
             <div className="space-y-6">
               {timeline.map((item, index) => (
@@ -110,13 +110,13 @@ const BenefitsSectionB = () => {
           </div>
 
           {/* Tip Box */}
-          <div className="mt-10 bg-white/20 rounded-2xl p-6 text-center border border-white/30">
+          <div className="mt-10 bg-primary/20 rounded-2xl p-6 text-center border border-primary/30">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Lightbulb className="w-5 h-5 text-white" />
-              <span className="font-bold text-white text-lg">Dica Importante</span>
+              <Lightbulb className="w-5 h-5 text-primary" />
+              <span className="font-bold text-primary text-lg">Dica Importante</span>
             </div>
-            <p className="text-white/90 text-sm leading-relaxed">
-              Para melhores resultados, mantenha o uso contínuo por pelo menos <strong className="text-white">90 dias</strong>. 
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Para melhores resultados, mantenha o uso contínuo por pelo menos <strong className="text-foreground">90 dias</strong>. 
               É o tempo que seu corpo precisa para regenerar o colágeno e você sentir a transformação completa.
             </p>
           </div>
