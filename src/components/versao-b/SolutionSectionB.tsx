@@ -1,5 +1,5 @@
 import { Check, Zap, Droplets, ShieldCheck } from "lucide-react";
-import productPot from "@/assets/product-pot.png";
+import productWoman from "@/assets/product-woman.jpg";
 import logoVerisol from "@/assets/logo-verisol.png";
 import logoHaplex from "@/assets/logo-haplex-plus.webp";
 
@@ -49,11 +49,11 @@ const SolutionSectionB = () => {
 
           {/* Product Image + Description */}
           <div className="flex flex-col md:flex-row items-center gap-6 mb-10">
-            <div className="w-48 md:w-56 flex-shrink-0">
+            <div className="w-56 md:w-64 flex-shrink-0 overflow-hidden rounded-2xl shadow-lg">
               <img 
-                src={productPot} 
-                alt="Colágeno Verisol Renova Be"
-                className="w-full drop-shadow-xl"
+                src={productWoman} 
+                alt="Mulher usando Colágeno Verisol Renova Be"
+                className="w-full h-auto object-cover scale-125 origin-top"
                 loading="lazy"
               />
             </div>
