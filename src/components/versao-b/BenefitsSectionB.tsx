@@ -43,13 +43,13 @@ const timeline: {
     Icon: TrendingUp,
   },
   {
-    label: "MÊS 3",
-    period: "90 dias",
-    title: "Resultado máximo",
+    label: "MÊS 3+",
+    period: "90 dias em diante",
+    title: "Manutenção contínua",
     results: [
       "Pele firme, luminosa e com viço",
-      "Autoestima renovada",
-      "Confiança para se olhar no espelho",
+      "Resultados mantidos com uso contínuo",
+      "Reposição essencial — seu corpo produz cada vez menos colágeno",
     ],
     Icon: Trophy,
     isLast: true,
