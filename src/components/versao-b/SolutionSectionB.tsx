@@ -47,34 +47,36 @@ const SolutionSectionB = () => {
             </p>
           </div>
 
-          {/* Product Image + Description */}
-          <div className="flex flex-col md:flex-row items-center gap-6 mb-10">
-            <div className="w-56 md:w-64 flex-shrink-0 overflow-hidden rounded-2xl shadow-lg">
+          {/* Product Image - Full Width */}
+          <div className="mb-8 -mx-4 md:mx-0">
+            <div className="overflow-hidden md:rounded-2xl shadow-lg">
               <img 
                 src={productWoman} 
                 alt="Mulher usando Colágeno Verisol Renova Be"
-                className="w-full h-auto object-cover scale-125 origin-top"
+                className="w-full h-auto object-cover"
                 loading="lazy"
               />
             </div>
-            <div className="flex-1">
-              <p className="text-muted-foreground text-sm md:text-base mb-4 leading-relaxed">
-                Desenvolvido para <strong className="text-foreground">mulheres acima de 35 anos</strong> que querem ver uma transformação real nas rugas, sem depender de cremes que só hidratam por cima.
-              </p>
-              <p className="text-muted-foreground text-sm md:text-base mb-4 leading-relaxed">
-                <strong className="text-foreground">Não é um suplemento comum.</strong> É uma fórmula com tecnologia Verisol® — a única forma de colágeno que vai diretamente até a pele e estimula a sua própria produção:
-              </p>
-              
-              {/* Benefits List */}
-              <ul className="space-y-2">
-                {benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-foreground">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          </div>
+
+          {/* Description */}
+          <div className="mb-10">
+            <p className="text-muted-foreground text-sm md:text-base mb-4 leading-relaxed">
+              Desenvolvido para <strong className="text-foreground">mulheres acima de 35 anos</strong> que querem ver uma transformação real nas rugas, sem depender de cremes que só hidratam por cima.
+            </p>
+            <p className="text-muted-foreground text-sm md:text-base mb-4 leading-relaxed">
+              <strong className="text-foreground">Não é um suplemento comum.</strong> É uma fórmula com tecnologia Verisol® — a única forma de colágeno que vai diretamente até a pele e estimula a sua própria produção:
+            </p>
+            
+            {/* Benefits List */}
+            <ul className="space-y-2">
+              {benefits.map((benefit, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground">{benefit}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Logos */}
