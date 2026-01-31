@@ -1,19 +1,26 @@
 import { lazy, Suspense } from "react";
-import HeroSectionSimple from "@/components/HeroSectionSimple";
 import { SelectedKitProvider } from "@/contexts/SelectedKitContext";
 
-// Lazy load below-the-fold components
-const CollagenDeclineSection = lazy(() => import("@/components/CollagenDeclineSection"));
-const ProblemSection = lazy(() => import("@/components/ProblemSection"));
-const FormulaSection = lazy(() => import("@/components/FormulaSection"));
-const ComparisonSection = lazy(() => import("@/components/ComparisonSection"));
-const ResultsSection = lazy(() => import("@/components/ResultsSection"));
+// Eager load - Above the fold
+import HeroSectionB from "@/components/versao-b/HeroSectionB";
+
+// Lazy load - Below the fold (versão B components)
+const ProblemSectionB = lazy(() => import("@/components/versao-b/ProblemSectionB"));
+const CollagenDeclineSectionB = lazy(() => import("@/components/versao-b/CollagenDeclineSectionB"));
+const SolutionSectionB = lazy(() => import("@/components/versao-b/SolutionSectionB"));
+const BenefitsSectionB = lazy(() => import("@/components/versao-b/BenefitsSectionB"));
+const ComparisonSectionB = lazy(() => import("@/components/versao-b/ComparisonSectionB"));
+const EducationSectionB = lazy(() => import("@/components/versao-b/EducationSectionB"));
+const GuaranteeSectionB = lazy(() => import("@/components/versao-b/GuaranteeSectionB"));
+const FinalCTASectionB = lazy(() => import("@/components/versao-b/FinalCTASectionB"));
+const FAQSectionB = lazy(() => import("@/components/versao-b/FAQSectionB"));
+const FooterB = lazy(() => import("@/components/versao-b/FooterB"));
+
+// Shared components (reused from original)
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const FlavorSection = lazy(() => import("@/components/FlavorSection"));
 const OfferSection = lazy(() => import("@/components/OfferSection"));
-const FAQSection = lazy(() => import("@/components/FAQSection"));
 const NutritionSection = lazy(() => import("@/components/NutritionSection"));
-const Footer = lazy(() => import("@/components/Footer"));
 const StickyBuyButton = lazy(() => import("@/components/StickyBuyButton"));
 
 // Minimal loading placeholder
@@ -27,42 +34,73 @@ const IndexB = () => {
   return (
     <SelectedKitProvider>
       <main className="overflow-hidden pb-28">
-        {/* 1. HERO - Sem preço, CTA âncora - Loaded eagerly */}
-        <HeroSectionSimple />
+        {/* 1. HERO - Gancho emocional */}
+        <HeroSectionB />
         
-        {/* 2. PROBLEMA - Identificação "Entenda se é o seu caso" */}
+        {/* 2. PROBLEMA - Check-list interativo */}
         <Suspense fallback={<SectionLoader />}>
-          <ProblemSection />
+          <ProblemSectionB />
         </Suspense>
         
-        {/* 3. DECLÍNIO DO COLÁGENO - Educação */}
+        {/* 3. DECLÍNIO DO COLÁGENO - Por que aos 35+ */}
         <Suspense fallback={<SectionLoader />}>
-          <CollagenDeclineSection />
+          <CollagenDeclineSectionB />
         </Suspense>
         
-        {/* 3. SOLUÇÃO - Ciência + Comparativo */}
+        {/* 4. SOLUÇÃO - Verisol + Tripla Ação */}
         <Suspense fallback={<SectionLoader />}>
-          <FormulaSection />
-          <ComparisonSection />
+          <SolutionSectionB />
         </Suspense>
         
-        {/* 4. PROVA SOCIAL - Resultados + Depoimentos */}
+        {/* 5. BENEFÍCIOS - Timeline de resultados */}
         <Suspense fallback={<SectionLoader />}>
-          <ResultsSection />
+          <BenefitsSectionB />
+        </Suspense>
+        
+        {/* 6. COMPARAÇÃO - Cremes vs Verisol */}
+        <Suspense fallback={<SectionLoader />}>
+          <ComparisonSectionB />
+        </Suspense>
+        
+        {/* 7. PROVA SOCIAL - Depoimentos (reused) */}
+        <Suspense fallback={<SectionLoader />}>
           <TestimonialsSection />
         </Suspense>
         
-        {/* 5. SABORES + OFERTA - Kits de Preço + Garantias */}
+        {/* 8. SABORES + OFERTA - Kits de Preço */}
         <Suspense fallback={<SectionLoader />}>
           <FlavorSection />
           <OfferSection />
         </Suspense>
         
-        {/* 6. TABELA NUTRICIONAL + FAQ + Footer */}
+        {/* 9. EDUCAÇÃO + URGÊNCIA */}
+        <Suspense fallback={<SectionLoader />}>
+          <EducationSectionB />
+        </Suspense>
+        
+        {/* 10. GARANTIA */}
+        <Suspense fallback={<SectionLoader />}>
+          <GuaranteeSectionB />
+        </Suspense>
+        
+        {/* 11. CTA FINAL */}
+        <Suspense fallback={<SectionLoader />}>
+          <FinalCTASectionB />
+        </Suspense>
+        
+        {/* 12. TABELA NUTRICIONAL */}
         <Suspense fallback={<SectionLoader />}>
           <NutritionSection />
-          <FAQSection />
-          <Footer />
+        </Suspense>
+        
+        {/* 13. FAQ */}
+        <Suspense fallback={<SectionLoader />}>
+          <FAQSectionB />
+        </Suspense>
+        
+        {/* 14. FOOTER */}
+        <Suspense fallback={<SectionLoader />}>
+          <FooterB />
         </Suspense>
       </main>
       
