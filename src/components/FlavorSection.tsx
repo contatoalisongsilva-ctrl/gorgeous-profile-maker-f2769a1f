@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import flavorCranberry from "@/assets/flavor-cranberry.jpg";
 import flavorFrutasTropicais from "@/assets/flavor-frutas-tropicais.jpg";
 import flavorLimao from "@/assets/flavor-limao.jpg";
@@ -14,7 +14,18 @@ const FlavorSection = () => {
     { name: "Tangerina", image: flavorTangerina, color: "#FF8C00" },
   ];
 
-  const [selectedFlavor, setSelectedFlavor] = useState(flavors[0]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Auto-rotate every 1.3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSelectedIndex((prev) => (prev + 1) % flavors.length);
+    }, 1300);
+
+    return () => clearInterval(interval);
+  }, [flavors.length]);
+
+  const selectedFlavor = flavors[selectedIndex];
 
   return (
     <section className="py-10 md:py-12 bg-white" id="sabores">
@@ -40,7 +51,7 @@ const FlavorSection = () => {
                 <img
                   src={selectedFlavor.image}
                   alt={selectedFlavor.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-opacity duration-300"
                 />
               </div>
             </div>
@@ -48,23 +59,22 @@ const FlavorSection = () => {
             {/* Flavor Names List - Right */}
             <div className="bg-secondary/30 rounded-xl p-3 flex-shrink-0">
               <div className="flex flex-col gap-1">
-                {flavors.map((flavor) => (
-                  <button
+                {flavors.map((flavor, index) => (
+                  <div
                     key={flavor.name}
-                    onClick={() => setSelectedFlavor(flavor)}
                     className={`
-                      text-xs py-2 px-3 rounded-lg text-left transition-all duration-200 whitespace-nowrap
-                      ${selectedFlavor.name === flavor.name 
-                        ? 'bg-white shadow-sm font-semibold' 
-                        : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
+                      text-xs py-2 px-3 rounded-lg text-left transition-all duration-300 whitespace-nowrap
+                      ${selectedIndex === index 
+                        ? 'bg-white shadow-sm font-semibold scale-105' 
+                        : 'text-muted-foreground'
                       }
                     `}
                     style={{ 
-                      color: selectedFlavor.name === flavor.name ? flavor.color : undefined 
+                      color: selectedIndex === index ? flavor.color : undefined 
                     }}
                   >
                     {flavor.name}
-                  </button>
+                  </div>
                 ))}
               </div>
             </div>
