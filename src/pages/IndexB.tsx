@@ -78,20 +78,7 @@ const IndexB = () => {
           <OfferSection />
         </Suspense>
         
-        {/* 9. EDUCAÇÃO + URGÊNCIA */}
-        <Suspense fallback={<SectionLoader />}>
-          <EducationSectionB />
-        </Suspense>
         
-        {/* 10. GARANTIA */}
-        <Suspense fallback={<SectionLoader />}>
-          <GuaranteeSectionB />
-        </Suspense>
-        
-        {/* 11. CTA FINAL */}
-        <Suspense fallback={<SectionLoader />}>
-          <FinalCTASectionB />
-        </Suspense>
         
         {/* 12. TABELA NUTRICIONAL */}
         <Suspense fallback={<SectionLoader />}>
